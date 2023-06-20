@@ -1,0 +1,112 @@
+.app-wrapper {
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    height: 94vh;
+    font-family: 'Lato', sans-serif;
+}
+
+.header-container {
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+    >img {
+        text-align: center;
+        width: 80px;
+        float: left;
+        margin-left: 20px;
+    }
+
+    >.header-button {
+        position: relative;
+        top: 50%;
+        transform: translateY(50%);
+        float: right;
+        margin-right: 20px;
+        background-color: #006880 !important;
+        border: none;
+    }
+
+    >.header-button:hover {
+        background-color: #029cc0 !important;
+    }
+}
+
+.chat-container,
+.questions-container {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 100px 20px 20px;
+}
+
+.questions-container {
+    width: 40%;
+
+    .questions-list {
+        flex-grow: 1;
+        overflow: auto;
+    }
+
+    .questions-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .questions-list::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .questions-list::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+
+    .questions-list::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}
+
+.chat-container {
+    width: 60%;
+
+    .chat-messages {
+        flex-grow: 1;
+        overflow: auto;
+        margin-top: 35px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 3px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px;
+
+    input {
+        flex-grow: 1;
+        margin-right: 10px;
+    }
+}
