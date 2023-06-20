@@ -25,7 +25,7 @@ export default {
       axios
         .post(`${callBaseUrl()}/users/`, userData)
         .then((response) => {
-          router.push("/login?newUser=true");
+          router.push("/teammate/login?newUser=true");
         })
         .catch((error) => {
           alertData.value = {
@@ -92,7 +92,7 @@ export default {
           Register
         </button>
         <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/login">Are you a user?</router-link>
+          <router-link class="link-register" to="/teammate/login">Are you a user?</router-link>
         </div>
       </form>
     </main>

@@ -102,7 +102,7 @@ export default {
           Sign in
         </button>
         <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/register"
+          <router-link class="link-register" to="/teammate/register"
             >Have you register yet?</router-link
           >
         </div>

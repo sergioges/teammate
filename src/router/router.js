@@ -26,7 +26,7 @@ function isAuthenticated() {
 }
 
 const routes = [{
-        path: '/context',
+        path: '/teammate/context',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -34,7 +34,7 @@ const routes = [{
         }
     },
     {
-        path: '/conversation',
+        path: '/teammate/conversation',
         name: 'Conversation',
         component: ChatView,
         meta: {
@@ -42,18 +42,18 @@ const routes = [{
         }
     },
     {
-        path: '/login',
+        path: '/teammate/login',
         name: 'Login',
         component: LoginView
     },
     {
-        path: '/register',
+        path: '/teammate/register',
         name: 'Register',
         component: RegisterView
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/context'
+        redirect: '/teammate/context'
     },
 ]
 
@@ -64,7 +64,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isAuthenticated()) {
-        next('/login'); 
+        next('/teammate/login'); 
     } else {
         next();
     }
