@@ -48,9 +48,9 @@ export default {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
           if (token) {
-            router.push("/context");
+            router.push("/teammate/context");
           } else {
-            router.push("/login");
+            router.push("/teammate/login");
           }
         })
         .catch((error) => {
