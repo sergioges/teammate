@@ -48,9 +48,9 @@ export default {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
           if (token) {
-            router.push("/teammate/context");
+            router.push("/context");
           } else {
-            router.push("/teammate/login");
+            router.push("/login");
           }
         })
         .catch((error) => {
@@ -102,7 +102,7 @@ export default {
           Sign in
         </button>
         <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/teammate/register"
+          <router-link class="link-register" to="/register"
             >Have you register yet?</router-link
           >
         </div>

@@ -16,7 +16,7 @@ export default {
   setup() {
     onMounted(() => {
       if (!sessionStorage.getItem("chatgpt-token")) {
-        router.push("/teammate/login");
+        router.push("/login");
       } else {
         getContextAndBackground();
       }
@@ -114,7 +114,7 @@ export default {
     const getImage = (image) => {
       const imageStore = useImageStore();
       imageStore.setCurrentImage(image);
-      router.push("/teammate/conversation");
+      router.push("/conversation");
     };
 
     const modalResponse = (response) => {
