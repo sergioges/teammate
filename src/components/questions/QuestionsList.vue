@@ -59,7 +59,7 @@ export default {
 
 <template>
   <div>
-    <h2 class="h3 mb-3 fw-normal text-white">Tus consultas</h2>
+    <h2 class="h3 mb-3 fw-normal text-white">Your inquiries</h2>
     <ul v-for="(question, index) in questions" :key="index">
       <li>
         <div v-if="editIndex !== index">

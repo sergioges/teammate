@@ -34,12 +34,12 @@ export default {
 <template>
   <div id="chat-container">
     <div class="radio-container">
-      <span>Tu avatar:</span>
+      <span>Your avatar:</span>
       <input type="radio" id="female" value="female" v-model="selectedOption" />
-      <label for="female">Mujer</label>
+      <label for="female">Female</label>
 
       <input type="radio" id="male" value="male" v-model="selectedOption" />
-      <label for="male">Hombre</label>
+      <label for="male">Male</label>
     </div>
     <ul v-for="(message, index) in conversation" :key="index">
       <li class="message" :class="message.role === 'user' ? 'right' : 'left'">

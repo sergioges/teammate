@@ -1,7 +1,7 @@
 .radio-container {
     color: white;
     position: fixed;
-    top: 115px;
+    top: 100px;
 
     >input[type="radio"] {
         vertical-align: middle;
@@ -41,6 +41,12 @@
     &.right .logo {
         left: auto;
         right: 10px;
+    }
+
+    >.message-content {
+        @media (max-width: 768px) {
+            font-size: 14px;
+        }
     }
 }
 

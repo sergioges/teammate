@@ -2,7 +2,7 @@
     background-size: cover;
     background-position: center center;
     display: flex;
-    height: 94vh;
+    height: 95vh;
     font-family: 'Lato', sans-serif;
 }
 
@@ -43,7 +43,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    margin: 100px 20px 20px;
+    margin: 85px 20px 25px;
 }
 
 .questions-container {
@@ -69,6 +69,10 @@
 
     .questions-list::-webkit-scrollbar-thumb:hover {
         background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+        display: none;
     }
 }
 
@@ -96,6 +100,10 @@
 
     .chat-messages::-webkit-scrollbar-thumb:hover {
         background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+        width: 90%;
     }
 }
 

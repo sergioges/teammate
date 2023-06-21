@@ -88,7 +88,7 @@ export default {
           <label for="userPassword">Password</label>
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" type="submit">
+        <button class="btn btn-primary w-100 py-2" type="submit">
           Register
         </button>
         <div class="mt-3 mb-3 text-body-secondary">

@@ -75,7 +75,7 @@ export default {
             ></button>
           </div>
           <div class="modal-body">
-            <p>{{ modalData.content }}</p>
+            <div v-html="modalData.content"></div>
           </div>
           <div class="modal-footer">
             <button

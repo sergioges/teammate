@@ -76,7 +76,7 @@ export default {
   <input
     type="text"
     class="text_input"
-    placeholder="Escribe tu pregunta y presiona enter..."
+    placeholder="Write your inquiry and press Enter..."
     v-model="question.content"
     @keyup.enter="sendQuestion(userId)"
   />

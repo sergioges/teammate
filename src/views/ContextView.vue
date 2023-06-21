@@ -46,14 +46,18 @@ export default {
         );
         // TODO If the modal appears once do not show again
         modalData.value = {
-          title: "¿Seguimos con el mismo tema?",
-          content: `En tu última visita dejaste como CONTEXTO: "${response.data.content}" y como TEMA DE IMAGEN:
-            "${response.data.background}" - ¿Quieres mantenerlo?
-            `,
+          title: "Are we continuing with the same topic?",
+          content: `<p>In your last visit, you left it as:</p>
+            <ul>
+              <li><strong>CONTEXT - </strong> ${response.data.content}</li>
+              <li><strong>BACKGROUND - </strong> ${response.data.background}</li>
+            </ul>
+            <p>Do you want to keep it?</p>
+          `,
         };
         acceptButton.value = {
           active: true,
-          action: "Quiero mantenerlo",
+          action: "Yes, I do",
         };
         contextDatabase.value = response.data.content;
         imgDatabase.value = response.data.background;
