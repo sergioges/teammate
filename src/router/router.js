@@ -55,6 +55,10 @@ const routes = [{
         path: '/:pathMatch(.*)',
         redirect: '/teammate/'
     },
+    {
+        path: '/:pathMatch(/teammate/*)',
+        redirect: '/teammate/'
+    },
 ]
 
 const router = createRouter({
