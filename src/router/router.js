@@ -1,6 +1,7 @@
 import {
     createRouter,
-    createWebHistory
+    createWebHistory,
+    createMemoryHistory
 } from 'vue-router'
 import jwt_decode from 'jwt-decode'
 import ContextView from '@/views/ContextView.vue'
@@ -34,7 +35,7 @@ const routes = [{
         }
     },
     {
-        path: '/conversation/',
+        path: '/conversation',
         name: 'Conversation',
         component: ChatView,
         meta: {
@@ -42,12 +43,12 @@ const routes = [{
         }
     },
     {
-        path: '/login/',
+        path: '/login',
         name: 'Login',
         component: LoginView
     },
     {
-        path: '/register/',
+        path: '/register',
         name: 'Register',
         component: RegisterView
     },
@@ -55,19 +56,11 @@ const routes = [{
         path: '/:pathMatch(.*)',
         redirect: '/'
     },
-    {
-        path: '/:catchAll(/teammate/.*)',
-        redirect: '/'
-    },
-    {
-        path: '/*',
-        redirect: '/'
-    },
 ]
 
 const router = createRouter({
-    history: createWebHistory(
-        import.meta.env.VITE_BASE_URL),
+    history: (createWebHistory(
+        import.meta.env.VITE_BASE_URL), createMemoryHistory()),
     routes
 })
 
