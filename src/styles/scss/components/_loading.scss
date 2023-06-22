@@ -1,7 +1,7 @@
 
 .chat-loading-container {
     position: fixed;
-    top: 110px;
+    top: 95px;
     right: 35px;
 
     .loading-balls {
@@ -16,6 +16,10 @@
         .loading-text {
             color: aliceblue;
             padding-top: 20px;
+
+            @media (max-width: 768px) {
+                visibility: hidden;
+            }
         }
 
         .balls {

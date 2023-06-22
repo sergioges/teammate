@@ -25,7 +25,7 @@ export default {
       axios
         .post(`${callBaseUrl()}/users/`, userData)
         .then((response) => {
-          router.push("/login?newUser=true");
+          router.push({path: "login", query:{newUser: true}})
         })
         .catch((error) => {
           alertData.value = {

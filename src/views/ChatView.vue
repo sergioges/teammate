@@ -25,7 +25,7 @@ export default {
     const conversation = ref([
       {
         role: "assistant",
-        content: "¡Hola! ¿En qué puedo ayudarte hoy?",
+        content: "Hello How can I help today?",
       },
     ]);
     const isLoading = ref(false);
@@ -92,6 +92,10 @@ export default {
       router.push("/login");
     };
 
+    const setNewContext = () => {
+      router.push("/context");
+    };
+
     return {
       conversation,
       isLoading,
@@ -104,6 +108,7 @@ export default {
       getUserQuestions,
       addQuestionCopied,
       setLogOut,
+      setNewContext,
       currentImage: imageStore.currentImage,
     };
   },
@@ -117,14 +122,20 @@ export default {
   >
     <div class="header-container">
       <img src="../assets/logo_name.png" alt="" />
-      <div class="header-button btn btn-primary" @click="setLogOut()">
-        Log Out
+      <div>
+        <div class="header-button btn btn-primary" @click="setLogOut()">
+          Log Out
+        </div>
+        <div class="header-button btn btn-primary" @click="setNewContext()">
+          New Context
+        </div>
       </div>
     </div>
     <div class="questions-container">
       <div class="questions-list">
         <questions-list
           :questions="questions"
+          @update:questions="questions = $event"
           @question-copied="addQuestionCopied"
         ></questions-list>
       </div>

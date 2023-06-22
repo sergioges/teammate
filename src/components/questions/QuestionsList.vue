@@ -1,5 +1,5 @@
 <script>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 
@@ -15,6 +15,9 @@ export default {
     "question-copied": (payload) => {
       return payload && typeof payload === "object";
     },
+    "update:questions": (payload) => {
+      return payload && typeof payload === "array"
+    } 
   },
   setup(props, { emit }) {
     // DATA
@@ -40,7 +43,27 @@ export default {
           headers,
         })
         .then((response) => {
-          console.log(response.data);
+          editIndex.value = null;
+        })
+        .catch((error) => {
+          console.log(error.response.data.detail);
+        });
+    };
+
+    const deleteQuestion = (question) => {
+      const headers = {
+        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
+      };
+
+      axios
+        .delete(
+          `${callBaseUrl()}/questions/${userId.value}/${question.question_id}`,
+          {
+            headers,
+          }
+        )
+        .then((response) => {
+          emit('update:questions', response.data);
           editIndex.value = null;
         })
         .catch((error) => {
@@ -52,7 +75,15 @@ export default {
       emit("question-copied", question);
     };
 
-    return { userId, editIndex, updateQuestion, startEdit, cancelEdit, copyQuestion };
+    return {
+      userId,
+      editIndex,
+      updateQuestion,
+      startEdit,
+      cancelEdit,
+      copyQuestion,
+      deleteQuestion,
+    };
   },
 };
 </script>
@@ -63,18 +94,45 @@ export default {
     <ul v-for="(question, index) in questions" :key="index">
       <li>
         <div v-if="editIndex !== index">
-          <span>{{ question.content }}</span>  
-          <img class="icon" src="../../assets/icons/edit-solid-24.png" @click="startEdit(index)">
-          <img class="icon" src="../../assets/icons/copy-alt-solid-24.png" @click="copyQuestion(question)">
+          <span>{{ question.content }}</span>
+          <img
+            class="icon"
+            title="Edit"
+            src="../../assets/icons/edit-solid-24.png"
+            @click="startEdit(index)"
+          />
+          <img
+            class="icon"
+            title="Copy"
+            src="../../assets/icons/copy-alt-solid-24.png"
+            @click="copyQuestion(question)"
+          />
+          <img
+            class="icon"
+            title="Delete"
+            src="../../assets/icons/error-circle-solid-24-white.png"
+            @click="deleteQuestion(question)"
+          />
         </div>
         <div v-else>
           <input
+            style="width: 80%"
             type="text"
             v-model="question.content"
             label="Press enter to save"
           />
-           <img class="icon" src="../../assets/icons/save-solid-24.png" @click="updateQuestion(question)">
-           <img class="icon" src="../../assets/icons/x-square-solid-24.png" @click="cancelEdit()">
+          <img
+            class="icon"
+            title="Update"
+            src="../../assets/icons/save-solid-24.png"
+            @click="updateQuestion(question)"
+          />
+          <img
+            class="icon"
+            title="Cancel"
+            src="../../assets/icons/x-square-solid-24.png"
+            @click="cancelEdit()"
+          />
         </div>
       </li>
     </ul>
@@ -82,5 +140,5 @@ export default {
 </template>
 
 <style scoped>
-@import '../../styles/scss/components/_questions-list.scss';
+@import "../../styles/scss/components/_questions-list.scss";
 </style>
