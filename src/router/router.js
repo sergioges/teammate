@@ -26,7 +26,7 @@ function isAuthenticated() {
 }
 
 const routes = [{
-        path: '/teammate/',
+        path: '/',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -53,16 +53,17 @@ const routes = [{
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/teammate/'
+        redirect: '/'
     },
     {
-        path: '/:pathMatch(/teammate/*)',
-        redirect: '/teammate/'
+        path: '/:pathMatch(/teammate/.*)',
+        redirect: '/'
     },
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(
+        import.meta.env.VITE_BASE_URL),
     routes
 })
 
