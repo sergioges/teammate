@@ -48,7 +48,7 @@ export default {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
           if (token) {
-            router.push("/context");
+            router.push({path: "context", query:{newAccess: true}});
           } else {
             router.push("/login");
           }

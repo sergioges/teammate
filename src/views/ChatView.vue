@@ -25,7 +25,7 @@ export default {
     const conversation = ref([
       {
         role: "assistant",
-        content: "Hello How can I help today?",
+        content: "Hello! How can I help today?",
       },
     ]);
     const isLoading = ref(false);

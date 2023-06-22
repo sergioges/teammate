@@ -26,6 +26,7 @@ export default {
       return `alert alert-${props.alertData.definition}`;
     });
 
+    // TODO Add icons to public folder
     const getIcon = computed(() => {
       return `../../teammate/assets/icons/${icons[props.alertData.definition]}`
     });

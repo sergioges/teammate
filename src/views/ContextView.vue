@@ -2,6 +2,7 @@
 import ImageLoading from "@/components/loading/ImageLoading.vue";
 import Modal from "@/components/library/Modal.vue";
 import router from "@/router/router";
+import { useRoute } from "vue-router";
 import { useImageStore } from "@/store/backgroundImage";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
@@ -14,6 +15,7 @@ export default {
     Modal,
   },
   setup() {
+    const route = useRoute();
     onMounted(() => {
       if (!sessionStorage.getItem("chatgpt-token")) {
         router.push("/login");
@@ -44,23 +46,27 @@ export default {
           )}`,
           { headers }
         );
-        // TODO If the modal appears once do not show again
-        modalData.value = {
-          title: "Are we continuing with the same topic?",
-          content: `<p>In your last visit, you left it as:</p>
+        if (route.query.newAccess) {
+          modalData.value = {
+            title: "Are we continuing with the same topic?",
+            content: `<p>In your last visit, you left it as:</p>
             <ul>
               <li><strong>CONTEXT - </strong> ${response.data.content}</li>
               <li><strong>BACKGROUND - </strong> ${response.data.background}</li>
             </ul>
             <p>Do you want to keep it?</p>
           `,
-        };
-        acceptButton.value = {
-          active: true,
-          action: "Yes, I do",
-        };
-        contextDatabase.value = response.data.content;
-        imgDatabase.value = response.data.background;
+          };
+          acceptButton.value = {
+            active: true,
+            action: "Yes, I do",
+          };
+          contextDatabase.value = response.data.content;
+          imgDatabase.value = response.data.background;
+        } else {
+          contextKeyword.value = response.data.content;
+          imgKeyword.value = response.data.background;
+        }
       } catch (error) {
         console.log(error.response.data.detail);
         // TODO si es un 401 devolver al login
@@ -152,7 +158,9 @@ export default {
     ></modal>
     <main class="form-context w-100 m-auto">
       <div class="gallery">
-        <h2 class="h3 mb-3 mt-3 fw-normal" v-if="images.length > 0">Choose your background image:</h2>
+        <h2 class="h3 mb-3 mt-3 fw-normal" v-if="images.length > 0">
+          Choose your background image:
+        </h2>
         <div class="image" v-for="(image, index) in images" :key="index">
           <img
             :src="image.image.url"
