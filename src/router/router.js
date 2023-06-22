@@ -59,6 +59,10 @@ const routes = [{
         path: '/:catchAll(/teammate/.*)',
         redirect: '/'
     },
+    {
+        path: '/*',
+        redirect: '/'
+    },
 ]
 
 const router = createRouter({
