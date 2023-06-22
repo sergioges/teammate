@@ -56,7 +56,7 @@ const routes = [{
         redirect: '/'
     },
     {
-        path: '/:pathMatch(/teammate/.*)',
+        path: '/:catchAll(/teammate/.*)',
         redirect: '/'
     },
 ]
