@@ -1,0 +1,61 @@
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    >img.modal-image {
+        height: -webkit-fill-available;
+        max-width: 60%;
+        object-fit: cover;
+    }
+
+    >.image-card {
+        text-align: center;
+
+        .card-text {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media screen and (min-width: 840px) {
+        >.image-card {
+            width: 18rem;
+            margin-right: 0;
+        }
+    }
+
+    @media screen and (min-width: 1000px) {
+        >.image-card {
+            width: 20rem;
+            margin-right: 24px;
+        }
+    }
+
+    .btn-primary {
+        background-color: #006880 !important;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #029cc0 !important;
+    }
+
+    .btn-primary::after {
+        content: var(--face-icon);
+        position: relative;
+        top: 5px;
+        left: 5px;
+    }
+}
+
+#example-gallery-modal > div > div > div.modal-footer > button:nth-child(1)::after {
+    content: var(--download-icon);
+    position: relative;
+    top: 5px;
+}
+
+#example-gallery-modal > div > div > div.modal-footer > button:nth-child(2)::after {
+    content: var(--close-icon);
+    position: relative;
+    top: 5px;
+}

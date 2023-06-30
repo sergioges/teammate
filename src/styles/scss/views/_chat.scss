@@ -57,6 +57,12 @@
         top: 8px;
         left: 73px;
     }
+
+    @media screen and (max-width: 840px) {
+        .gallery-button {
+            display: none;
+        }
+    }
 }
 
 .chat-container,

@@ -159,5 +159,5 @@ export default {
 </template>
 
 <style scoped>
-@import "../../styles/scss/components/_modal-gallery.scss";
+@import "../../styles/scss/components/_show-gallery.scss";
 </style>
