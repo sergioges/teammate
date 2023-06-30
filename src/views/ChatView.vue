@@ -81,6 +81,7 @@ export default {
         });
     };
 
+    // TODO Si la consulta es editada, revisar porque no se copia y se pega en el input
     const addQuestionCopied = (question) => {
       questionCopied.value = question;
     };
@@ -96,6 +97,10 @@ export default {
       router.push("/context");
     };
 
+    const setGallery = () => {
+      router.push("/gallery");
+    };
+
     return {
       conversation,
       isLoading,
@@ -109,6 +114,7 @@ export default {
       addQuestionCopied,
       setLogOut,
       setNewContext,
+      setGallery,
       currentImage: imageStore.currentImage,
     };
   },
@@ -123,10 +129,13 @@ export default {
     <div class="header-container">
       <img src="../assets/logo_name.png" alt="" />
       <div>
-        <div class="header-button btn btn-primary" @click="setLogOut()">
+        <div class="logout-button btn btn-primary" @click="setLogOut()">
           Log Out
         </div>
-        <div class="header-button btn btn-primary" @click="setNewContext()">
+        <div class="gallery-button btn btn-primary" @click="setGallery()">
+          Gallery
+        </div>
+        <div class="context-button btn btn-primary" @click="setNewContext()">
           New Context
         </div>
       </div>

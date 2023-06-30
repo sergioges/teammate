@@ -1,13 +1,13 @@
 import {
     createRouter,
-    createWebHistory,
-    createMemoryHistory
+    createWebHistory
 } from 'vue-router'
 import jwt_decode from 'jwt-decode'
 import ContextView from '@/views/ContextView.vue'
 import ChatView from '@/views/ChatView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
+import GalleryView from '@/views/GalleryView.vue'
 
 function isAuthenticated() {
     const token = sessionStorage.getItem('chatgpt-token');
@@ -27,7 +27,7 @@ function isAuthenticated() {
 }
 
 const routes = [{
-        path: '/',
+        path: '/context',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -38,6 +38,14 @@ const routes = [{
         path: '/conversation',
         name: 'Conversation',
         component: ChatView,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/gallery',
+        name: 'Gallery',
+        component: GalleryView,
         meta: {
             requiresAuth: true
         }
@@ -54,13 +62,12 @@ const routes = [{
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/'
+        redirect: '/context'
     },
 ]
 
 const router = createRouter({
-    history: (createWebHistory(
-        import.meta.env.VITE_BASE_URL), createMemoryHistory()),
+    history: createWebHistory(),
     routes
 })
 

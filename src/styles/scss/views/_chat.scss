@@ -18,18 +18,44 @@
         margin-left: 20px;
     }
 
-    .header-button {
+    .logout-button, .gallery-button, .context-button {
         position: relative;
         top: 50%;
         transform: translateY(50%);
         float: right;
-        margin-right: 20px;
+        margin-right: 10px;
+        padding-right: 35px;
         background-color: #006880 !important;
         border: none;
+
+        &:hover {
+            background-color: #029cc0 !important;
+        }
+
+        &:first-of-type {
+            margin-right: 20px;
+        }
     }
 
-    >.header-button:hover {
-        background-color: #029cc0 !important;
+    .context-button::after {
+        content: var(--new-context-icon);
+        position: absolute;
+        top: 8px;
+        left: 110px;
+    }
+
+    .gallery-button::after {
+        content: var(--gallery-icon);
+        position: absolute;
+        top: 8px;
+        left: 70px;
+    }
+
+    .logout-button::after {
+        content: var(--logout-icon);
+        position: absolute;
+        top: 8px;
+        left: 73px;
     }
 }
 

@@ -9,7 +9,7 @@ export default {
     pasteQuestionCopied: {
       type: Object,
       required: false,
-      default: {}
+      default: {},
     },
   },
   emits: {
@@ -31,33 +31,37 @@ export default {
       content: "",
     });
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
+    const placeholderInfo = ref("Write your inquiry and press Enter...");
 
     // Methods
-    // TODO evitar  que se envíe pregunta vacía
     const sendQuestion = (id) => {
-      emit("question-generated", {
-        role: "user",
-        content: question.value.content,
-      });
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
-
-      // Clean input avoiding clean question data
-      setTimeout(() => {
-        question.value.content = "";
-      }, 300);
-
-      axios
-        .post(`${callBaseUrl()}/conversation/${id}`, question.value, {
-          headers,
-        })
-        .then((response) => {
-          emit("answer-generated", response.data);
-        })
-        .catch((error) => {
-          console.log(error.response.data.detail);
+      if (!question.value.content) {
+        placeholderInfo.value = "Please, do not forget to send a query.";
+      } else {
+        emit("question-generated", {
+          role: "user",
+          content: question.value.content,
         });
+        const headers = {
+          Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
+        };
+        placeholderInfo.value = "Write your inquiry and press Enter...";
+        // Clean input avoiding clean question data
+        setTimeout(() => {
+          question.value.content = "";
+        }, 300);
+
+        axios
+          .post(`${callBaseUrl()}/conversation/${id}`, question.value, {
+            headers,
+          })
+          .then((response) => {
+            emit("answer-generated", response.data);
+          })
+          .catch((error) => {
+            console.log(error.response.data.detail);
+          });
+      }
     };
 
     watch(
@@ -67,7 +71,7 @@ export default {
       }
     );
 
-    return { userId, question, sendQuestion };
+    return { userId, question, placeholderInfo, sendQuestion };
   },
 };
 </script>
@@ -76,12 +80,12 @@ export default {
   <input
     type="text"
     class="text_input"
-    placeholder="Write your inquiry and press Enter..."
+    :placeholder="placeholderInfo"
     v-model="question.content"
     @keyup.enter="sendQuestion(userId)"
   />
 </template>
 
 <style scoped>
-@import '../../styles/scss/components/_input-message.scss';
+@import "../../styles/scss/components/_input-message.scss";
 </style>
