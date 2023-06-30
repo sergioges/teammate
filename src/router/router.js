@@ -1,6 +1,7 @@
 import {
     createRouter,
-    createWebHistory
+    createWebHistory,
+    createMemoryHistory
 } from 'vue-router'
 import jwt_decode from 'jwt-decode'
 import ContextView from '@/views/ContextView.vue'
@@ -27,7 +28,7 @@ function isAuthenticated() {
 }
 
 const routes = [{
-        path: '/context',
+        path: '/',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -62,12 +63,13 @@ const routes = [{
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/context'
+        redirect: '/'
     },
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: (createWebHistory(
+        import.meta.env.VITE_BASE_URL), createMemoryHistory()),
     routes
 })
 

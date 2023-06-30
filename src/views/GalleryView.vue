@@ -4,13 +4,13 @@ import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import Modal from "@/components/library/Modal.vue";
-import ModalGallery from "@/components/gallery/ModalGallery.vue";
+import ShowGallery from "@/components/gallery/ShowGallery.vue";
 
 export default {
   name: "GalleryView",
   components: {
     Modal,
-    ModalGallery,
+    ShowGallery,
   },
   setup() {
     // DATA
@@ -92,11 +92,10 @@ export default {
 <template>
   <div class="gallery bg-body-tertiary">
     <modal :modal-data="modalData"></modal>
-    <modal-gallery
+    <show-gallery
       :selectedImage="selectedImage"
       :titleImage="titleImage"
-    ></modal-gallery>
-
+    ></show-gallery>
     <section class="navbar">
       <img src="../assets/logo_name.png" alt="" />
       <div class="container-search">
@@ -124,7 +123,6 @@ export default {
     <section class="grid-gallery" v-if="!noImages">
       <a
         class="grid-gallery__item"
-        href="#"
         v-for="(image, index) in images"
         :key="index"
       >

@@ -2,7 +2,7 @@
 import { computed, ref, watch } from "vue";
 
 export default {
-  name: "ModalGallery",
+  name: "ShowGallery",
   props: {
     selectedImage: {
       type: Object,
@@ -52,7 +52,7 @@ export default {
       const endIndex = urlImage.indexOf("?");
       const nameImage = urlImage.substring(startIndex, endIndex);
 
-      var xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.open("GET", urlImage, true);
       xhr.responseType = "blob";
       xhr.onload = function () {
@@ -67,7 +67,12 @@ export default {
       xhr.send();
     };
 
-    return { capitalizeTitle, capitalizeDescription, capitalizeAuthor, downloadImage };
+    return {
+      capitalizeTitle,
+      capitalizeDescription,
+      capitalizeAuthor,
+      downloadImage,
+    };
   },
 };
 </script>
@@ -117,9 +122,7 @@ export default {
                 />
               </div>
               <div class="card-body">
-                <h5 class="card-title">
-                  Author: {{ capitalizeAuthor }}
-                </h5>
+                <h5 class="card-title">Author: {{ capitalizeAuthor }}</h5>
                 <p class="card-text">
                   {{ capitalizeDescription }}
                 </p>
@@ -139,7 +142,7 @@ export default {
               data-bs-dismiss="modal"
               @click="downloadImage"
             >
-            Download
+              Download
             </button>
             <button
               type="button"

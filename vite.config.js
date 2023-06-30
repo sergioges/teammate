@@ -11,6 +11,15 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   },
+  // build: {
+  //   rollupOptions: {
+  //     external: [
+  //       /^node:.*/,
+  //       '/',
+  //       'vue'
+  //     ]
+  //   }
+  // }
   // css: {
   //   preprocessorOptions: {
   //     scss: {
