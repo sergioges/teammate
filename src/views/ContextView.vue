@@ -70,6 +70,7 @@ export default {
       } catch (error) {
         console.log(error.response.data.detail);
         // TODO si es un 401 devolver al login
+        // TODO Si es contexto por primera vez devuelve un NOT FOUND
       }
     };
 

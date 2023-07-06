@@ -78,6 +78,7 @@ export default {
         })
         .catch((error) => {
           console.log(error.response.data.detail);
+          // TODO Si es la primera vez y no hay pregiuntas, devuelve un 500
         });
     };
 

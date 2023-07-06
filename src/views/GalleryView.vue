@@ -61,7 +61,7 @@ export default {
     };
 
     const backChat = () => {
-        router.push("/conversation");
+      router.push("/conversation");
     };
 
     const controlModalError = (error) => {
@@ -96,6 +96,7 @@ export default {
       :selectedImage="selectedImage"
       :titleImage="titleImage"
     ></show-gallery>
+
     <section class="navbar">
       <img src="../assets/logo_name.png" alt="" />
       <div class="container-search">
@@ -112,15 +113,13 @@ export default {
             aria-label="Search"
             required
           />
-          <button class="btn btn-primary" type="submit">
-            Search
-          </button>
+          <button class="btn btn-primary" type="submit">Search</button>
           <div class="btn btn-primary" @click="backChat()">Back</div>
         </form>
       </div>
     </section>
 
-    <section class="grid-gallery" v-if="!noImages">
+    <div class="grid-gallery" v-if="!noImages">
       <a
         class="grid-gallery__item"
         v-for="(image, index) in images"
@@ -132,10 +131,10 @@ export default {
           @click="getImage(image)"
         />
       </a>
-    </section>
+    </div>
     <h2 class="h2 mb-3 fw-normal text-center" v-else>There is no results</h2>
 
-    <section class="more-button" v-if="nextPage.url">
+    <div class="more-button" v-if="nextPage.url">
       <button
         type="button"
         class="btn btn-outline-secondary"
@@ -143,7 +142,8 @@ export default {
       >
         More images...
       </button>
-    </section>
+    </div>
+    <div class="white-space" v-else></div>
   </div>
 </template>
 

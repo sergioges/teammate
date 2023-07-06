@@ -31,11 +31,14 @@ export default {
       content: "",
     });
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
-    const placeholderInfo = ref("Write your inquiry and press Enter...");
+    const placeholderInfo = ref("Write your inquiry and press Send");
 
     // Methods
     const sendQuestion = (id) => {
-      if (!question.value.content) {
+      const regexJumpLine = /^[\n]+$/;
+      let onlyJumpLine = regexJumpLine.test(question.value.content);
+      if (!question.value.content || onlyJumpLine) {
+        question.value.content = "";
         placeholderInfo.value = "Please, do not forget to send a query.";
       } else {
         emit("question-generated", {
@@ -45,7 +48,7 @@ export default {
         const headers = {
           Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
         };
-        placeholderInfo.value = "Write your inquiry and press Enter...";
+        placeholderInfo.value = "Write your inquiry and press Send...";
         // Clean input avoiding clean question data
         setTimeout(() => {
           question.value.content = "";
@@ -77,13 +80,24 @@ export default {
 </script>
 
 <template>
-  <input
-    type="text"
-    class="text_input"
-    :placeholder="placeholderInfo"
-    v-model="question.content"
-    @keyup.enter="sendQuestion(userId)"
-  />
+  <div>
+    <form @submit.prevent="sendQuestion(userId)" class="text_input input-group">
+      <textarea
+        rows="1"
+        type="text"
+        class="text_textarea form-control"
+        :placeholder="placeholderInfo"
+        v-model="question.content"
+      />
+      <button
+        class="send-button btn btn-secondary"
+        type="submit"
+        id="button-send"
+      >
+        Send
+      </button>
+    </form>
+  </div>
 </template>
 
 <style scoped>

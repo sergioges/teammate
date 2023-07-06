@@ -1,10 +1,28 @@
 .text_input {
-    font-size: 16px;
+    font-size: 18px;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 10px 15px;
     width: 100%;
     border: none;
+}
+
+.text_textarea {
+    height: 43px;
+}
+
+.send-button {
+    position: relative;
+    float: right;
+    padding-right: 35px;
+    background-color: #006880 !important;
+    border: none;
+
+    &::after {
+        content: var(--send-icon);
+        position: absolute;
+        top: 12px;
+        left: 50px;
+    }
 }

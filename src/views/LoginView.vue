@@ -65,7 +65,11 @@ export default {
         });
     };
 
-    return { userData, alertData, showAlert, sendData };
+    const sendRegister = () => {
+      router.push("/register");
+    };
+
+    return { userData, alertData, showAlert, sendData, sendRegister };
   },
 };
 </script>
@@ -85,6 +89,7 @@ export default {
             class="form-control"
             id="floatingInput"
             placeholder="name@example.com"
+            required
           />
           <label for="floatingInput">Email address</label>
         </div>
@@ -95,17 +100,16 @@ export default {
             class="form-control"
             id="floatingPassword"
             placeholder="Password"
+            required
           />
           <label for="floatingPassword">Password</label>
         </div>
         <button class="btn btn-primary w-100 py-2" type="submit">
           Sign in
         </button>
-        <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/register"
-            >Have you register yet?</router-link
-          >
-        </div>
+        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendRegister">
+          Have you register yet?
+        </button>
       </form>
     </main>
   </div>
