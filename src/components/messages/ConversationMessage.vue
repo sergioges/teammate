@@ -6,12 +6,14 @@ export default {
   props: {
     conversation: {
       type: Array,
-      required: false
+      required: false,
     },
   },
   setup(props) {
     // Data
     const selectedOption = ref("pixel");
+    const isVisible = ref(false);
+    const copiedIndex = ref(0);
 
     // Computed
     const avatarUser = computed(() => {
@@ -23,10 +25,34 @@ export default {
 
     // Methods
     const getIndexDiv = (index) => {
-      return index + 1 === props.conversation.length
-    } 
+      return index + 1 === props.conversation.length;
+    };
 
-    return { selectedOption, avatarUser, avatarAssistant, getIndexDiv };
+    const copyContent = (content, index) => {
+      isVisible.value = true;
+      setTimeout(() => {
+        isVisible.value = false;
+      }, 2000)
+      copiedIndex.value = index;
+      navigator.clipboard
+        .writeText(content)
+        .then(() => {
+          console.log("Texto copiado al portapapeles: " + content);
+        })
+        .catch((error) => {
+          console.error("Error al copiar al portapapeles:", error);
+        });
+    };
+
+    return {
+      selectedOption,
+      avatarUser,
+      avatarAssistant,
+      isVisible,
+      copiedIndex,
+      getIndexDiv,
+      copyContent,
+    };
   },
 };
 </script>
@@ -43,6 +69,14 @@ export default {
     </div>
     <ul v-for="(message, index) in conversation" :key="index">
       <li class="message" :class="message.role === 'user' ? 'right' : 'left'">
+        <div class="icon-wrapper" v-if="message.role === 'assistant' && index != 0">
+          <span v-if="copiedIndex == index" :style="{ visibility: isVisible ? 'visible' : 'hidden' }">Text copied!</span>
+          <img
+            @click="copyContent(message.content, index)"
+            title="Copy answer"
+            src="../../assets/icons/copy-alt-grey-24.png"
+          />
+        </div>
         <img
           class="logo"
           :src="message.role === 'user' ? avatarUser : avatarAssistant"
@@ -56,5 +90,5 @@ export default {
 </template>
 
 <style scoped>
-@import '../../styles/scss/components/_conversation-message.scss';
+@import "../../styles/scss/components/_conversation-message.scss";
 </style>
