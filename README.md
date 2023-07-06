@@ -5,9 +5,9 @@
 ![Teammate -- Your Professional Assistant](https://github.com/sergioges/teammate/blob/main/public/logo_readme.png?raw=true)
 
 ## Description
-La aplicación front se conecta con la app teammate-backend y permite la comunicación con el motor de chatGPT simulando una conversación, además de poder acceder a un buscador de imágenes de alta calidad y tener un listado de las peticiciones realizadas por el usuario.
+The **front-end application** connects to the [**teammate-backend app**](https://github.com/sergioges/teammate-backend) and allows communication with the chatGPT engine by simulating a conversation. It also provides access to a high-quality image search engine and maintains a list of user requests. 
 
-Su creación tiene como principio ser un asistente para la generación de contenido vía chatGPT y obtención de imágenes vía Unsplash.
+Its purpose is to serve as an assistant for content generation through [chatGPT](https://platform.openai.com/) and image retrieval through [Unsplash](https://unsplash.com/developers).
 
 ## Technology employed
 - **Vue** --> v^3.2
