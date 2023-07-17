@@ -6,8 +6,6 @@ import { callBaseUrl } from "@/mixin/BaseUrl";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 
-// TODO If user already is logged in, avoid to visit the login view
-
 export default {
   name: "LoginView",
   components: {

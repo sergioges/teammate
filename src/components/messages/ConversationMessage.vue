@@ -44,6 +44,10 @@ export default {
         });
     };
 
+    const formatMessage = (message) => {
+      return message.replace(/\n/g, "<br>");
+    };
+
     return {
       selectedOption,
       avatarUser,
@@ -52,6 +56,7 @@ export default {
       copiedIndex,
       getIndexDiv,
       copyContent,
+      formatMessage,
     };
   },
 };
@@ -69,8 +74,15 @@ export default {
     </div>
     <ul v-for="(message, index) in conversation" :key="index">
       <li class="message" :class="message.role === 'user' ? 'right' : 'left'">
-        <div class="icon-wrapper" v-if="message.role === 'assistant' && index != 0">
-          <span v-if="copiedIndex == index" :style="{ visibility: isVisible ? 'visible' : 'hidden' }">Text copied!</span>
+        <div
+          class="icon-wrapper"
+          v-if="message.role === 'assistant' && index != 0"
+        >
+          <span
+            v-if="copiedIndex == index"
+            :style="{ visibility: isVisible ? 'visible' : 'hidden' }"
+            >Text copied!</span
+          >
           <img
             @click="copyContent(message.content, index)"
             title="Copy answer"
@@ -82,7 +94,7 @@ export default {
           :src="message.role === 'user' ? avatarUser : avatarAssistant"
           alt=""
         />
-        <p class="message-content">{{ message.content }}</p>
+        <p v-html="formatMessage(message.content)"></p>
         <span v-if="getIndexDiv(index)" id="end-message"></span>
       </li>
     </ul>
