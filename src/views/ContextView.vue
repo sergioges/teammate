@@ -69,8 +69,9 @@ export default {
         }
       } catch (error) {
         console.log(error.response.data.detail);
-        // TODO si es un 401 devolver al login
-        // TODO Si es contexto por primera vez devuelve un NOT FOUND
+        if (error.response && error.response.data.detail.code == 401) {
+          router.push("/login");
+        }
       }
     };
 
@@ -90,8 +91,10 @@ export default {
           updateContextAndBackground();
         })
         .catch((error) => {
+          if (error.response && error.response.data.detail.code == 401) {
+            router.push("/login");
+          }
           controlModalError(error);
-          // TODO si es un 401 devolver al login
         });
     };
 
@@ -108,8 +111,10 @@ export default {
           console.log(response.data);
         })
         .catch((error) => {
+          if (error.response && error.response.data.detail.code == 401) {
+            router.push("/login");
+          }
           controlModalError(error);
-          // TODO si es un 401 devolver al login
         });
     };
 

@@ -36,7 +36,10 @@ export default {
         setTimeout(() => {
           showAlert.value = false;
         }, 2000);
-      }
+      };
+      if (sessionStorage.getItem("chatgpt-token")) {
+        router.push({path: "context"});
+      };
     });
 
     // Methods

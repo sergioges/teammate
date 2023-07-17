@@ -82,7 +82,6 @@ export default {
         });
     };
 
-    // TODO Si la consulta es editada, revisar porque no se copia y se pega en el input
     const addQuestionCopied = (question) => {
       questionCopied.value = question;
     };
