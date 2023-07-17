@@ -27,7 +27,7 @@ export default {
     });
 
     const getIcon = computed(() => {
-      return `/icons/${icons[props.alertData.definition]}`
+      return `/teammate/icons/${icons[props.alertData.definition]}`
     });
 
     return { alertStyles, getIcon }
