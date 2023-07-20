@@ -89,7 +89,7 @@ export default {
       sessionStorage.removeItem("chatgpt-userId");
       sessionStorage.removeItem("background-image");
       sessionStorage.removeItem("chatgpt-token");
-      router.push("/login");
+      router.push("/welcome");
     };
 
     const setNewContext = () => {

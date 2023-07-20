@@ -39,7 +39,11 @@ export default {
         });
     };
 
-    return { userData, alertData, showAlert, sendData };
+    const sendLogin = () => {
+      router.push("/login");
+    };
+
+    return { userData, alertData, showAlert, sendData, sendLogin };
   },
 };
 </script>
@@ -91,9 +95,9 @@ export default {
         <button class="btn btn-primary w-100 py-2" type="submit">
           Register
         </button>
-        <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/login">Are you a user?</router-link>
-        </div>
+        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendLogin">
+          Are you a user?
+        </button>
       </form>
     </main>
   </div>

@@ -9,6 +9,7 @@ import ChatView from '@/views/ChatView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import GalleryView from '@/views/GalleryView.vue'
+import LandingView from '@/views/LandingView.vue'
 
 function isAuthenticated() {
     const token = sessionStorage.getItem('chatgpt-token');
@@ -62,8 +63,13 @@ const routes = [{
         component: RegisterView
     },
     {
+        path: '/welcome',
+        name: 'Landing',
+        component: LandingView
+    },
+    {
         path: '/:pathMatch(.*)',
-        redirect: '/'
+        redirect: '/welcome'
     },
 ]
 
@@ -75,7 +81,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isAuthenticated()) {
-        next('/login'); 
+        next('/welcome'); 
     } else {
         next();
     }
