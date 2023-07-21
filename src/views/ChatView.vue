@@ -92,12 +92,8 @@ export default {
       router.push("/welcome");
     };
 
-    const setNewContext = () => {
-      router.push("/context");
-    };
-
-    const setGallery = () => {
-      router.push("/gallery");
+    const sendView = (view) => {
+      router.push(view);
     };
 
     return {
@@ -112,8 +108,7 @@ export default {
       getUserQuestions,
       addQuestionCopied,
       setLogOut,
-      setNewContext,
-      setGallery,
+      sendView,
       currentImage: imageStore.currentImage,
     };
   },
@@ -131,10 +126,10 @@ export default {
         <div class="logout-button btn btn-primary" @click="setLogOut()">
           Log Out
         </div>
-        <div class="gallery-button btn btn-primary" @click="setGallery()">
+        <div class="gallery-button btn btn-primary" @click="sendView('/gallery')">
           Gallery
         </div>
-        <div class="context-button btn btn-primary" @click="setNewContext()">
+        <div class="context-button btn btn-primary" @click="sendView('/')">
           New Context
         </div>
       </div>
