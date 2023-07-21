@@ -66,11 +66,11 @@ export default {
         });
     };
 
-    const sendRegister = () => {
-      router.push("/register");
+    const sendView = (view) => {
+      router.push(view);
     };
 
-    return { userData, alertData, showAlert, sendData, sendRegister };
+    return { userData, alertData, showAlert, sendData, sendView };
   },
 };
 </script>
@@ -78,7 +78,7 @@ export default {
 <template>
   <div class="login py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-      <img src="../assets/logo_complete.png" alt="" width="200" height="200" />
+      <img src="../assets/logo_complete.png" alt="" width="200" height="200" @click="sendView('/')" />
       <alert v-if="showAlert" :alert-data="alertData"></alert>
       <form @submit.prevent="sendData">
         <h1 class="h3 mb-3 fw-normal">Please Sign in</h1>
@@ -108,7 +108,7 @@ export default {
         <button class="btn btn-primary w-100 py-2" type="submit">
           Sign in
         </button>
-        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendRegister">
+        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/register')">
           Have you register yet?
         </button>
       </form>

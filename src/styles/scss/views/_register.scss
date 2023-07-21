@@ -5,6 +5,10 @@
 .form-signin {
     max-width: 330px;
     padding: 1rem;
+
+    >img {
+        cursor: pointer;
+    }
 }
 
 .form-signin .form-floating:focus-within {

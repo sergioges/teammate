@@ -39,11 +39,11 @@ export default {
         });
     };
 
-    const sendLogin = () => {
-      router.push("/login");
+    const sendView = (view) => {
+      router.push(view);
     };
 
-    return { userData, alertData, showAlert, sendData, sendLogin };
+    return { userData, alertData, showAlert, sendData, sendView };
   },
 };
 </script>
@@ -51,7 +51,7 @@ export default {
 <template>
   <div class="login py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-      <img src="../assets/logo_complete.png" alt="" width="200" height="200" />
+      <img src="../assets/logo_complete.png" alt="" width="200" height="200" @click="sendView('/')" />
       <alert
         v-if="showAlert"
         :alert-data="alertData"
@@ -95,7 +95,7 @@ export default {
         <button class="btn btn-primary w-100 py-2" type="submit">
           Register
         </button>
-        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendLogin">
+        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/login')">
           Are you a user?
         </button>
       </form>
