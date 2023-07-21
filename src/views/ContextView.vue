@@ -18,7 +18,7 @@ export default {
     const route = useRoute();
     onMounted(() => {
       if (!sessionStorage.getItem("chatgpt-token")) {
-        router.push("/login");
+        router.push("/welcome");
       } else {
         getContextAndBackground();
       }
@@ -70,7 +70,7 @@ export default {
       } catch (error) {
         console.log(error.response.data.detail);
         if (error.response && error.response.data.detail.code == 401) {
-          router.push("/login");
+          router.push("/welcome");
         }
       }
     };
@@ -92,7 +92,7 @@ export default {
         })
         .catch((error) => {
           if (error.response && error.response.data.detail.code == 401) {
-            router.push("/login");
+            router.push("/welcome");
           }
           controlModalError(error);
         });
@@ -112,7 +112,7 @@ export default {
         })
         .catch((error) => {
           if (error.response && error.response.data.detail.code == 401) {
-            router.push("/login");
+            router.push("/welcome");
           }
           controlModalError(error);
         });
