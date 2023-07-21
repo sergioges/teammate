@@ -188,18 +188,18 @@ a.button:active {
   color: white;
 }
 
-a.button.button-stripe {
+.button.button-stripe {
   background-color: rgba(0, 0, 0, 0.2);
   border-color: white;
 }
 
-a.button.button-stripe:hover {
+.button.button-stripe:hover {
   color: #222222;
   background-color: white;
   border-color: white;
 }
 
-a.button.button-stripe:active {
+.button.button-stripe:active {
   color: #222222;
   background-color: #e5e5e5;
   border-color: #e5e5e5;
@@ -372,11 +372,11 @@ footer {
   margin-top: 50px;
 } 
 
-.buttons-discover a:nth-child(2) {
+.buttons-discover button:nth-child(2) {
   margin-left: 20px;
 }
 
-.buttons-discover a {
+.buttons-discover button {
   text-align: center;
   width: 150px; /* Ajusta el valor según el ancho deseado */
 }

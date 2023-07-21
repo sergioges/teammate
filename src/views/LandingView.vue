@@ -2,6 +2,7 @@
 import { reactive, ref } from "vue";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 
 export default {
@@ -48,7 +49,11 @@ export default {
         });
     };
 
-    return { userData, showAlert, alertData, sendData };
+    const sendView = (view) => {
+      router.push(view);
+    };
+
+    return { userData, showAlert, alertData, sendData, sendView };
   },
 };
 </script>
@@ -76,10 +81,8 @@ export default {
             </p>
             <p class="autor">With chatGPT engine</p>
             <div class="buttons-wrapper">
-              <router-link class="button" to="/register">Register</router-link>
-              <router-link class="button button-stripe" to="/login"
-                >Log In</router-link
-              >
+              <button class="button" @click="sendView('/register')">Register</button>
+              <button class="button button-stripe" @click="sendView('/login')">Log In</button>
             </div>
           </div>
           <!-- /.header-wrapper -->
@@ -158,10 +161,8 @@ export default {
                 effort.
               </p>
               <div class="buttons-discover">
-                <router-link class="button" to="/register"
-                  >Register</router-link
-                >
-                <router-link class="button" to="/login">Log In</router-link>
+                <button class="button" @click="sendView('/register')">Register</button>
+                <button class="button" @click="sendView('/login')">Log In</button>
               </div>
             </div>
             <div class="discover-img">
