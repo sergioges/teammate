@@ -3,6 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { isAuthenticated } from "@/mixin/AuthToken";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 
@@ -35,7 +36,7 @@ export default {
           showAlert.value = false;
         }, 2000);
       };
-      if (sessionStorage.getItem("chatgpt-token")) {
+      if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
         router.push({path: "/"});
       };
     });

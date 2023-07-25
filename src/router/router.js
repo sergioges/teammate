@@ -3,30 +3,13 @@ import {
     createWebHistory,
     createMemoryHistory
 } from 'vue-router'
-import jwt_decode from 'jwt-decode'
+import { isAuthenticated } from "@/mixin/AuthToken";
 import ContextView from '@/views/ContextView.vue'
 import ChatView from '@/views/ChatView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import GalleryView from '@/views/GalleryView.vue'
 import LandingView from '@/views/LandingView.vue'
-
-function isAuthenticated() {
-    const token = sessionStorage.getItem('chatgpt-token');
-
-    if (token) {
-        try {
-            const decoded = jwt_decode(token);
-            const currentTime = Date.now() / 1000;
-
-            return decoded.exp > currentTime;
-        } catch (error) {
-            return false; // Si ocurre algún error al decodificar el token, se considera inválido
-        }
-    }
-
-    return false;
-}
 
 const routes = [{
         path: '/',

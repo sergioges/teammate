@@ -80,6 +80,7 @@ export default {
               professional needs.
             </p>
             <p class="autor">With chatGPT engine</p>
+            <!-- TODO line up the buttons in one row when is responsive -->
             <div class="buttons-wrapper">
               <button class="button" @click="sendView('/register')">Register</button>
               <button class="button button-stripe" @click="sendView('/login')">Log In</button>
