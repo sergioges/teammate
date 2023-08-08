@@ -9,7 +9,19 @@
 }
 
 .text_textarea {
-    height: 43px;
+    height: 45px;
+    border-radius: 0px;
+    resize: vertical;
+
+    &::placeholder {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 768px) {
+        height: 55px;
+    }
 }
 
 .send-button {
@@ -18,11 +30,17 @@
     padding-right: 35px;
     background-color: #006880 !important;
     border: none;
+    border-radius: 0px;
 
-    &::after {
-        content: var(--send-icon);
-        position: absolute;
-        top: 12px;
-        left: 50px;
+    & {
+        position: relative;
+    
+        &::after {
+            content: var(--send-icon);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(40%, -40%);
+        }
     }
 }

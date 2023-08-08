@@ -261,6 +261,15 @@ header .autor a:active {
 
 header .buttons-wrapper {
   padding-top: 53px;
+  display: inline-flex;
+
+  .button {
+    margin-right: 10px;
+  }
+
+  .button-stripe {
+    margin-left: 10px;
+  }
 }
 
 header .buttons-wrapper .button-stripe {
@@ -701,9 +710,6 @@ footer {
 /* ===[ Responsive just mobile portrait ]=== */
 
 @media (max-width: 479px) {
-  header .buttons-wrapper .button.button-stripe {
-    margin-left: 0;
-  }
 
   .discover-content h2 {
     font-size: 36px;
