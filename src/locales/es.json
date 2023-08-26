@@ -121,5 +121,24 @@
       "logout": "Cerrar",
       "send": "Enviar"
     }
+  },
+  "gallery" : {
+    "input": "¿Qué te gustaría encontrar?",
+    "button": {
+      "search": "Buscar",
+      "back": "Atrás",
+      "more": "Más imágenes...",
+      "profile": "Visitar perfil",
+      "download": "Descargar",
+      "close": "Cerrar"
+    },
+    "author": "Autor:",
+    "empty": "Lo siento, no encontramos la imagen que buscabas",
+    "modal": {
+      "error": {
+        "title": "Algo ha ido mal",
+        "content": "Una disculpa por el inconveniente, inténtalo de nuevo."
+      }
+    }
   }
 }

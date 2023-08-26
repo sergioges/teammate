@@ -5,6 +5,7 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import Modal from "@/components/library/Modal.vue";
 import ShowGallery from "@/components/gallery/ShowGallery.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "GalleryView",
@@ -24,6 +25,11 @@ export default {
     };
     const modalData = ref({});
     const noImages = ref(false);
+
+    const { t } = useI18n();
+    const placeholderInput = t("gallery.input");
+    const modalErrorTitle = t("gallery.modal.error.title");
+    const modalErrorContent = t("gallery.modal.error.content");
 
     //METHODS
     const getFirstImages = () => {
@@ -67,8 +73,8 @@ export default {
     const controlModalError = (error) => {
       console.log(error.response.data.detail);
       modalData.value = {
-        title: "Something went wrong",
-        content: "Sorry for the inconvenience, please try again.",
+        title: modalErrorTitle,
+        content: modalErrorContent,
       };
     };
 
@@ -80,6 +86,7 @@ export default {
       nextPage,
       modalData,
       noImages,
+      placeholderInput,
       getFirstImages,
       getNextImages,
       getImage,
@@ -109,12 +116,12 @@ export default {
             v-model="query"
             class="input-search form-control me-2"
             type="search"
-            placeholder="Want do you want to find?"
+            :placeholder="placeholderInput"
             aria-label="Search"
             required
           />
-          <button class="btn btn-primary" type="submit">Search</button>
-          <div class="btn btn-primary" @click="backChat()">Back</div>
+          <button class="btn btn-primary" type="submit">{{ $t("gallery.button.search") }}</button>
+          <div class="btn btn-primary" @click="backChat()">{{ $t("gallery.button.back") }}</div>
         </form>
       </div>
     </section>
@@ -132,7 +139,7 @@ export default {
         />
       </a>
     </div>
-    <h2 class="h2 mb-3 fw-normal text-center" v-else>There is no results</h2>
+    <h2 class="h2 mb-3 fw-normal text-center" v-else>{{ $t("gallery.empty") }}</h2>
 
     <div class="more-button" v-if="nextPage.url">
       <button
@@ -140,7 +147,7 @@ export default {
         class="btn btn-outline-secondary"
         @click="getNextImages"
       >
-        More images...
+      {{ $t("gallery.button.more") }}
       </button>
     </div>
     <div class="white-space" v-else></div>

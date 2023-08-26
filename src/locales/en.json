@@ -107,7 +107,7 @@
   "chat": {
     "inquiries": "Your inquiries",
     "input": "Write your inquiry and press Send",
-    "requiredInput": "Please, do not forget to send an inquery",
+    "requiredInput": "Please, do not forget to send an inquiry",
     "avatar": {
       "title": "Your avatar",
       "female": "Female",
@@ -120,6 +120,25 @@
       "gallery": "Gallery",
       "logout": "Log Out",
       "send": "Send"
+    }
+  },
+  "gallery" : {
+    "input": "What do you want to find?",
+    "button": {
+      "search": "Search",
+      "back": "Back",
+      "more": "More images...",
+      "profile": "Visit profile",
+      "download": "Download",
+      "close": "Close"
+    },
+    "author": "Author:",
+    "empty": "Sorry, there wasn't any image available",
+    "modal": {
+      "error": {
+        "title": "Something went wrong",
+        "content": "Sorry for the inconvenience, please try again."
+      }
     }
   }
 }
