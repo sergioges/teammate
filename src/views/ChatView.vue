@@ -141,7 +141,7 @@ export default {
         <div class="gallery-button btn btn-primary" @click="sendView('/gallery')">
           {{ $t("chat.button.gallery") }}
         </div>
-        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/context')">
+        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/')">
           {{ $t("chat.button.context") }}
         </div>
       </div>
