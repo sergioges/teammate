@@ -65,12 +65,12 @@ export default {
 <template>
   <div id="chat-container">
     <div class="radio-container">
-      <span>Your avatar:</span>
+      <span>{{ $t("chat.avatar.title") }}:</span>
       <input type="radio" id="female" value="female" v-model="selectedOption" />
-      <label for="female">Female</label>
+      <label for="female">{{ $t("chat.avatar.female") }}</label>
 
       <input type="radio" id="male" value="male" v-model="selectedOption" />
-      <label for="male">Male</label>
+      <label for="male">{{ $t("chat.avatar.male") }}</label>
     </div>
     <ul v-for="(message, index) in conversation" :key="index">
       <li class="message" :class="message.role === 'user' ? 'right' : 'left'">
@@ -81,7 +81,7 @@ export default {
           <span
             v-if="copiedIndex == index"
             :style="{ visibility: isVisible ? 'visible' : 'hidden' }"
-            >Text copied!</span
+            >{{ $t("chat.copied") }}</span
           >
           <img
             @click="copyContent(message.content, index)"

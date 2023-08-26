@@ -7,6 +7,7 @@ import { useImageStore } from "@/store/backgroundImage";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import { ref, computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "ContextView",
@@ -24,6 +25,7 @@ export default {
       }
     });
     // Data
+    const { t } = useI18n();
     const contextKeyword = ref("");
     const imgKeyword = ref("");
     const contextDatabase = ref("");
@@ -37,6 +39,18 @@ export default {
       Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}` || "",
     };
 
+    // TRANSLATION
+    const modalTitle = t("context.modal.title");
+    const modalContent01 = t("context.modal.content01");
+    const modalContent02 = t("context.modal.content02");
+    const modalContent03 = t("context.modal.content03");
+    const modalContent04 = t("context.modal.content04");
+    const modalErrorTitle = t("context.modal.error.title");
+    const modalErrorContent = t("context.modal.error.content");
+    const acceptButtonAction = t("context.modal.button.accept");
+    const placeholderTopic = t("context.topic");
+    const placeholderBackground = t("context.background");
+
     // Methods
     const getContextAndBackground = async () => {
       try {
@@ -48,18 +62,18 @@ export default {
         );
         if (route.query.newAccess) {
           modalData.value = {
-            title: "Are we continuing with the same topic?",
-            content: `<p>In your last visit, you left it as:</p>
+            title: modalTitle,
+            content: `<p>${modalContent01}</p>
             <ul>
-              <li><strong>CONTEXT - </strong> ${response.data.content}</li>
-              <li><strong>BACKGROUND - </strong> ${response.data.background}</li>
+              <li><strong>${modalContent02} - </strong> ${response.data.content}</li>
+              <li><strong>${modalContent03} - </strong> ${response.data.background}</li>
             </ul>
-            <p>Do you want to keep it?</p>
+            <p>${modalContent04}</p>
           `,
           };
           acceptButton.value = {
             active: true,
-            action: "Yes, I do",
+            action: acceptButtonAction
           };
           contextDatabase.value = response.data.content;
           imgDatabase.value = response.data.background;
@@ -122,8 +136,11 @@ export default {
       console.log(error.response.data.detail);
       IsLoading.value = false;
       modalData.value = {
-        title: "Something went wrong",
-        content: "Sorry for the inconvenience, please try again.",
+        title: modalErrorTitle,
+        content: modalErrorContent,
+      };
+      acceptButton.value = {
+        active: false
       };
     };
 
@@ -147,6 +164,8 @@ export default {
       IsLoading,
       modalData,
       acceptButton,
+      placeholderTopic,
+      placeholderBackground,
       sendContext,
       getImage,
       modalResponse,
@@ -165,7 +184,7 @@ export default {
     <main class="form-context w-100 m-auto">
       <div class="gallery">
         <h2 class="h3 mb-3 mt-3 fw-normal" v-if="images.length > 0">
-          Choose your background image:
+          {{ $t("context.choose") }}
         </h2>
         <div class="image" v-for="(image, index) in images" :key="index">
           <img
@@ -176,7 +195,7 @@ export default {
         </div>
       </div>
       <image-loading v-if="IsLoading" />
-      <h1 class="h3 mb-3 mt-3 fw-normal">How Can I Help?</h1>
+      <h1 class="h3 mb-3 mt-3 fw-normal">{{ $t("context.title") }}</h1>
       <!-- TODO Structure for inject code format -->
       <!-- <pre style="background-color: grey"><code>{{ contextPre }}</code></pre> -->
       <form @submit.prevent="sendContext">
@@ -187,10 +206,10 @@ export default {
             class="form-control"
             id="contextKeyword"
             name="contextKeyword"
-            placeholder="What do you want to talk about today?"
+            :placeholder="placeholderTopic"
           />
           <label for="floatingInput"
-            >What do you want to talk about today?</label
+            >{{ placeholderTopic }}</label
           >
         </div>
         <div class="form-floating">
@@ -200,14 +219,14 @@ export default {
             class="form-control"
             id="imgKeyword"
             name="imgKeyword"
-            placeholder="Tell me what background image you would like to see"
+            :placeholder="placeholderBackground"
           />
           <label for="imgKeyword"
-            >Tell me what background image you would like to see:</label
+            >{{ placeholderBackground }}</label
           >
         </div>
         <button class="btn btn-primary w-100 py-2" type="submit">
-          Let's go!
+          {{ $t("context.button") }}
         </button>
       </form>
     </main>

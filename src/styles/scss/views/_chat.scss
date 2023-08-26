@@ -75,6 +75,10 @@
         left: 110px;
     }
 
+    .context-button-trans::after {
+        left: 134px;
+    } 
+
     .gallery-button::after {
         content: var(--gallery-icon);
         position: absolute;
@@ -88,6 +92,10 @@
         top: 8px;
         left: 73px;
     }
+
+    .logout-button-trans::after {
+        left: 63px;
+    } 
 
     @media screen and (max-width: 840px) {
         .gallery-button {

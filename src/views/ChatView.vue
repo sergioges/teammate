@@ -4,10 +4,11 @@ import InputMessage from "@/components/messages/InputMessage.vue";
 import ChatLoading from "@/components/loading/ChatLoading.vue";
 import QuestionsList from "@/components/questions/QuestionsList.vue";
 import { useImageStore } from "@/store/backgroundImage";
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, computed, onMounted } from "vue";
 import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "ChatView",
@@ -22,10 +23,11 @@ export default {
     const imageStore = useImageStore();
 
     // Data
+    const { t } = useI18n();
     const conversation = ref([
       {
         role: "assistant",
-        content: "Hello! How can I help today?",
+        content: t("chat.welcome"),
       },
     ]);
     const isLoading = ref(false);
@@ -36,6 +38,14 @@ export default {
     nextTick(() => {
       chatAutoScroll();
       getUserQuestions();
+    });
+
+    // COMPUTED
+    const contextIcon = computed(() => {
+      return t("chat.button.context") === 'Nuevo Contexto' ? 'context-button-trans' : '';
+    });
+    const logoutIcon = computed(() => {
+      return t("chat.button.logout") === 'Cerrar' ? 'logout-button-trans' : '';
     });
 
     // Methods
@@ -89,7 +99,7 @@ export default {
       sessionStorage.removeItem("chatgpt-userId");
       sessionStorage.removeItem("background-image");
       sessionStorage.removeItem("chatgpt-token");
-      router.push("/welcome");
+      router.push("/");
     };
 
     const sendView = (view) => {
@@ -102,6 +112,8 @@ export default {
       userId,
       questions,
       questionCopied,
+      contextIcon,
+      logoutIcon,
       addUserQuestion,
       addAssistantAnswer,
       chatAutoScroll,
@@ -123,14 +135,14 @@ export default {
     <div class="header-container">
       <img src="../assets/logo_name.png" alt="" />
       <div>
-        <div class="logout-button btn btn-primary" @click="setLogOut()">
-          Log Out
+        <div class="logout-button btn btn-primary" :class="logoutIcon" @click="setLogOut()">
+          {{ $t("chat.button.logout") }}
         </div>
         <div class="gallery-button btn btn-primary" @click="sendView('/gallery')">
-          Gallery
+          {{ $t("chat.button.gallery") }}
         </div>
-        <div class="context-button btn btn-primary" @click="sendView('/')">
-          New Context
+        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/context')">
+          {{ $t("chat.button.context") }}
         </div>
       </div>
     </div>

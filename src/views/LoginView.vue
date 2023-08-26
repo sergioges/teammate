@@ -6,6 +6,7 @@ import { callBaseUrl } from "@/mixin/BaseUrl";
 import { isAuthenticated } from "@/mixin/AuthToken";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "LoginView",
@@ -25,6 +26,10 @@ export default {
     });
     const showAlert = ref(false);
 
+    const { t } = useI18n();
+    const placeholderEmail = t("login.email");
+    const placeholderPassword = t("login.password");
+
     onMounted(() => {
       if (route.query.newUser) {
         showAlert.value = JSON.parse(route.query.newUser) || false;
@@ -37,7 +42,7 @@ export default {
         }, 2000);
       };
       if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
-        router.push({path: "/"});
+        router.push({path: "context"});
       };
     });
 
@@ -50,7 +55,7 @@ export default {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
           if (token) {
-            router.push({path: "/", query:{newAccess: true}});
+            router.push({path: "context", query:{newAccess: true}});
           } else {
             router.push("/login");
           }
@@ -71,7 +76,7 @@ export default {
       router.push(view);
     };
 
-    return { userData, alertData, showAlert, sendData, sendView };
+    return { userData, alertData, showAlert, placeholderEmail, placeholderPassword, sendData, sendView };
   },
 };
 </script>
@@ -82,7 +87,7 @@ export default {
       <img src="../assets/logo_complete.png" alt="" width="200" height="200" @click="sendView('/')" />
       <alert v-if="showAlert" :alert-data="alertData"></alert>
       <form @submit.prevent="sendData">
-        <h1 class="h3 mb-3 fw-normal">Please Sign in</h1>
+        <h1 class="h3 mb-3 fw-normal">{{ $t("login.title") }}</h1>
 
         <div class="form-floating">
           <input
@@ -90,10 +95,10 @@ export default {
             type="email"
             class="form-control"
             id="floatingInput"
-            placeholder="name@example.com"
+            :placeholder="placeholderEmail"
             required
           />
-          <label for="floatingInput">Email address</label>
+          <label for="floatingInput">{{ $t("login.email") }}</label>
         </div>
         <div class="form-floating">
           <input
@@ -101,16 +106,16 @@ export default {
             type="password"
             class="form-control"
             id="floatingPassword"
-            placeholder="Password"
+            :placeholder="placeholderPassword"
             required
           />
-          <label for="floatingPassword">Password</label>
+          <label for="floatingPassword">{{ $t("login.password") }}</label>
         </div>
         <button class="btn btn-primary w-100 py-2" type="submit">
-          Sign in
+          {{ $t("login.button.login") }}
         </button>
         <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/register')">
-          Have you register yet?
+          {{ $t("login.button.user") }}
         </button>
       </form>
     </main>

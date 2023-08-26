@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "InputMessage",
@@ -30,8 +31,11 @@ export default {
       role: "user",
       content: "",
     });
+
+    const { t } = useI18n();
+
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
-    const placeholderInfo = ref("Write your inquiry and press Send");
+    const placeholderInfo = ref(t("chat.input"));
 
     // Methods
     const sendQuestion = (id) => {
@@ -39,7 +43,7 @@ export default {
       let onlyJumpLine = regexJumpLine.test(question.value.content);
       if (!question.value.content || onlyJumpLine) {
         question.value.content = "";
-        placeholderInfo.value = "Please, do not forget to send a query.";
+        placeholderInfo.value = t("chat.requiredInput");
       } else {
         emit("question-generated", {
           role: "user",
@@ -48,7 +52,7 @@ export default {
         const headers = {
           Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
         };
-        placeholderInfo.value = "Write your inquiry and press Send...";
+        placeholderInfo.value = t("chat.input");
         // Clean input avoiding clean question data
         setTimeout(() => {
           question.value.content = "";
@@ -94,7 +98,7 @@ export default {
         type="submit"
         id="button-send"
       >
-        Send
+        {{ $t("chat.button.send") }}
       </button>
     </form>
   </div>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "LandingVue",
@@ -21,6 +22,9 @@ export default {
     });
     const showAlert = ref(false);
 
+    const { t } = useI18n();
+    const placeholder = t("landing.newsletter.placeholder");
+
     // METHODS
     const sendData = () => {
       axios
@@ -37,7 +41,7 @@ export default {
           userData.email = "";
         })
         .catch((error) => {
-          console.log(error.response.data.detail)
+          console.log(error.response.data.detail);
           alertData.value = {
             definition: "danger",
             message: error.response.data.detail.message,
@@ -53,7 +57,7 @@ export default {
       router.push(view);
     };
 
-    return { userData, showAlert, alertData, sendData, sendView };
+    return { userData, showAlert, alertData, placeholder, sendData, sendView };
   },
 };
 </script>
@@ -71,19 +75,22 @@ export default {
             class="header-img"
           />
           <div class="header-wrapper">
-            <h1>Teammate <span>Your Professional Assistant</span></h1>
+            <h1>
+              {{ $t("landing.title") }}<span>{{ $t("landing.subtitle") }}</span>
+            </h1>
             <p>
-              Teammate, your new professional assistant, taps into the magic of
-              <strong>chatGPT's artificial intelligence</strong>. Get ready for
-              an all-in-one solution that boosts your productivity and
-              efficiency. Say hello to your new trusted companion for all your
-              professional needs.
+              {{ $t("landing.description01") }}
+              <strong>{{ $t("landing.chatgpt") }}</strong>
+              {{ $t("landing.description02") }}
             </p>
-            <p class="autor">With chatGPT engine</p>
-            <!-- TODO line up the buttons in one row when is responsive -->
+            <p class="autor">{{ $t("landing.author") }}</p>
             <div class="buttons-wrapper">
-              <button class="button" @click="sendView('/register')">Register</button>
-              <button class="button button-stripe" @click="sendView('/login')">Log In</button>
+              <button class="button" @click="sendView('/register')">
+                {{ $t("landing.button.register") }}
+              </button>
+              <button class="button button-stripe" @click="sendView('/login')">
+                {{ $t("landing.button.login") }}
+              </button>
             </div>
           </div>
           <!-- /.header-wrapper -->
@@ -101,12 +108,8 @@ export default {
                   width="24"
                   alt=""
                 />
-                <h5>New</h5>
-                <p>
-                  Embrace the cutting-edge and innovative magic of chatGPT's
-                  artificial intelligence, delivering a fresh and modern
-                  experience.
-                </p>
+                <h5>{{ $t("landing.promo.new.title") }}</h5>
+                <p>{{ $t("landing.promo.new.text") }}</p>
               </div>
               <div class="promo-column">
                 <img
@@ -115,20 +118,13 @@ export default {
                   width="33"
                   alt=""
                 />
-                <h5>Professional</h5>
-                <p>
-                  Rely on a qualified, skilled, and proficient all-in-one
-                  solution, fostering productivity and efficiency.
-                </p>
+                <h5>{{ $t("landing.promo.professional.title") }}</h5>
+                <p>{{ $t("landing.promo.professional.text") }}</p>
               </div>
               <div class="promo-column">
                 <img src="/icons/landing-gallery.png" width="30" alt="" />
-                <h5>All-in-one</h5>
-                <p>
-                  Experience a comprehensive and versatile assistant, integrated
-                  with high-quality gallery, ensuring complete and unified
-                  support.
-                </p>
+                <h5>{{ $t("landing.promo.all.title") }}</h5>
+                <p>{{ $t("landing.promo.all.text") }}</p>
               </div>
               <div class="promo-column">
                 <img
@@ -137,11 +133,8 @@ export default {
                   width="32"
                   alt=""
                 />
-                <h5>Trusted</h5>
-                <p>
-                  With a proven and dependable reputation, chatGPT becomes your
-                  reliable and esteemed companion, earning your trust.
-                </p>
+                <h5>{{ $t("landing.promo.trusted.title") }}</h5>
+                <p>{{ $t("landing.promo.trusted.text") }}</p>
               </div>
             </div>
           </div>
@@ -151,19 +144,21 @@ export default {
         <div class="discover clearfix">
           <div class="wrap">
             <div class="discover-content clearfix">
-              <h2>Discover</h2>
+              <h2>{{ $t("landing.discover.title") }}</h2>
               <p>
-                Discover how <strong>chatGPT technology</strong> can be your
-                perfect ally to empower your business in generating original and
-                personalized ideas and content, all with a simple click.
-                Additionally, access a
-                <strong>vast number of high-quality images</strong>, ensuring
-                your messages reach precisely where you intend with minimal
-                effort.
+                {{ $t("landing.discover.text01") }}
+                <strong>{{ $t("landing.discover.chatgpt") }}</strong>
+                {{ $t("landing.discover.text02") }}
+                <strong>{{ $t("landing.discover.images") }}</strong>
+                {{ $t("landing.discover.text03") }}
               </p>
               <div class="buttons-discover">
-                <button class="button" @click="sendView('/register')">Register</button>
-                <button class="button" @click="sendView('/login')">Log In</button>
+                <button class="button" @click="sendView('/register')">
+                  {{ $t("landing.button.register") }}
+                </button>
+                <button class="button" @click="sendView('/login')">
+                  {{ $t("landing.button.login") }}
+                </button>
               </div>
             </div>
             <div class="discover-img">
@@ -179,11 +174,8 @@ export default {
           <div class="wrap">
             <div class="tab">
               <div class="box visible">
-                <h4>People talking about <a href="#">#teammate</a></h4>
-                <p>
-                  Join our #teammate adventure. Discover everything it can do
-                  for your business!
-                </p>
+                <h4>{{ $t("landing.comments.title") }} <a href="#">{{ $t("landing.comments.hash") }}</a></h4>
+                <p>{{ $t("landing.comments.text") }}</p>
               </div>
             </div>
           </div>
@@ -193,7 +185,7 @@ export default {
         <div class="simple clearfix">
           <div class="wrap">
             <div class="simple-content">
-              <h3>The Easiest UI</h3>
+              <h3>{{ $t("landing.simple.title") }}</h3>
               <ul>
                 <li class="clearfix">
                   <img
@@ -201,7 +193,7 @@ export default {
                     height="32"
                     width="32"
                     alt=""
-                  /><span>Easy to use</span>
+                  /><span>{{ $t("landing.simple.easy") }}</span>
                 </li>
                 <li class="clearfix">
                   <img
@@ -209,7 +201,7 @@ export default {
                     height="32"
                     width="32"
                     alt=""
-                  /><span>Always available</span>
+                  /><span>{{ $t("landing.simple.always") }}</span>
                 </li>
                 <li class="clearfix">
                   <img
@@ -217,7 +209,7 @@ export default {
                     height="32"
                     width="32"
                     alt=""
-                  /><span>Personal interface</span>
+                  /><span>{{ $t("landing.simple.personal") }}</span>
                 </li>
                 <li class="clearfix">
                   <img
@@ -225,7 +217,7 @@ export default {
                     height="32"
                     width="32"
                     alt=""
-                  /><span>High-quality gallery</span>
+                  /><span>{{ $t("landing.simple.image") }}</span>
                 </li>
                 <li class="clearfix">
                   <img
@@ -233,7 +225,7 @@ export default {
                     height="32"
                     width="32"
                     alt=""
-                  /><span>Keep your inquiries</span>
+                  /><span>{{ $t("landing.simple.inquiry") }}</span>
                 </li>
               </ul>
             </div>
@@ -246,28 +238,27 @@ export default {
         <!-- /.simple clearfix -->
         <div class="newsletter clearfix">
           <div class="wrap">
-            <div class="newsletter-title">Want to know more?</div>
+            <div class="newsletter-title">{{ $t("landing.newsletter.title") }}</div>
             <div class="alert-container">
-              <alert class="alert" v-if="showAlert" :alert-data="alertData"></alert>
+              <alert
+                class="alert"
+                v-if="showAlert"
+                :alert-data="alertData"
+              ></alert>
             </div>
             <div class="newsletter-form clearfix">
               <form @submit.prevent="sendData">
                 <input
                   v-model="userData.email"
                   type="email"
-                  placeholder="Write your email"
+                  :placeholder="placeholder"
                   class="input-text"
                   required
                 />
-                <button class="button" type="submit">
-                  Register
-                </button>
+                <button class="button" type="submit">{{ $t("landing.button.register") }}</button>
               </form>
             </div>
-            <p>
-              If you want to know more about the app and how to get more for
-              your business. I will be glad to help.
-            </p>
+            <p>{{ $t("landing.newsletter.description") }}</p>
           </div>
           <!-- /.wrap -->
         </div>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "RegisterView",
@@ -19,6 +20,11 @@ export default {
     });
     const alertData = ref({});
     const showAlert = ref(false);
+
+    const { t } = useI18n();
+    const placeholderName = t("register.name");
+    const placeholderEmail = t("register.email");
+    const placeholderPassword = t("register.password");
 
     // Methods
     const sendData = () => {
@@ -43,7 +49,7 @@ export default {
       router.push(view);
     };
 
-    return { userData, alertData, showAlert, sendData, sendView };
+    return { userData, alertData, showAlert, placeholderName, placeholderEmail, placeholderPassword, sendData, sendView };
   },
 };
 </script>
@@ -57,17 +63,17 @@ export default {
         :alert-data="alertData"
       ></alert>
       <form @submit.prevent="sendData">
-        <h1 class="h3 mb-3 fw-normal">Please Register</h1>
+        <h1 class="h3 mb-3 fw-normal">{{ $t("register.title") }}</h1>
         <div class="form-floating">
           <input
             v-model="userData.name"
             type="text"
             class="form-control"
             id="userName"
-            placeholder="Your name"
+            :placeholder="placeholderName"
             required
           />
-          <label for="floatingInput">Your name</label>
+          <label for="floatingInput">{{ $t("register.name") }}</label>
         </div>
         <div class="form-floating">
           <input
@@ -75,10 +81,10 @@ export default {
             type="email"
             class="form-control"
             id="userEmail"
-            placeholder="name@example.com"
+            :placeholder="placeholderEmail"
             required
           />
-          <label for="userEmail">Email address</label>
+          <label for="userEmail">{{ $t("register.email") }}</label>
         </div>
         <div class="form-floating">
           <input
@@ -86,17 +92,17 @@ export default {
             type="password"
             class="form-control"
             id="userPassword"
-            placeholder="Password"
+            :placeholder="placeholderPassword"
             required
           />
-          <label for="userPassword">Password</label>
+          <label for="userPassword">{{ $t("register.password") }}</label>
         </div>
 
         <button class="btn btn-primary w-100 py-2" type="submit">
-          Register
+          {{ $t("register.button.register") }}
         </button>
         <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/login')">
-          Are you a user?
+          {{ $t("register.button.user") }}
         </button>
       </form>
     </main>
