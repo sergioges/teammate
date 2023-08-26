@@ -42,7 +42,7 @@ export default {
         }, 2000);
       };
       if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
-        router.push({path: "context"});
+        router.push({path: "/"});
       };
     });
 
@@ -55,7 +55,7 @@ export default {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
           if (token) {
-            router.push({path: "context", query:{newAccess: true}});
+            router.push({path: "/", query:{newAccess: true}});
           } else {
             router.push("/login");
           }

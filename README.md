@@ -10,11 +10,17 @@ The **front-end application** connects to the [**teammate-backend app**](https:/
 Its purpose is to serve as an assistant for content generation through [chatGPT](https://platform.openai.com/) and image retrieval through [Unsplash](https://unsplash.com/developers).
 
 ## Technology employed
-- **Vue** --> v^3.2
-- **Vue-router** --> v^4.2
-- **Pinia** --> v^2.0
+- **vue** --> v^3.2
+- **ue-router** --> v^4.2
+- **vite** --> ^4.3.2
+- **vitest** --> ^0.34.1
+- **@vue/test-utils** --> ^2.4.1
+- **pinia** --> v^2.0
+- **axios** --> ^1.4.0
 - **jwt-decode** --> v^3.1
-- **BootStrap** --> v^5.3
+- **vue-i18n** --> ^9.2.2
+- **sass** --> ^1.62.1
+- **bootstrap** --> v^5.3
 
 ## Execution method
 1. Install node modules\
@@ -25,6 +31,9 @@ Its purpose is to serve as an assistant for content generation through [chatGPT]
 
 3. Create production app\
 `npm run build`
+
+4. Unit test with jest\
+`npm run test:unit`
 
 ## Tutorials
 |Concept | Link |
