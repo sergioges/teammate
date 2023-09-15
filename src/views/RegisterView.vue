@@ -4,12 +4,14 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import ImageLoading from "@/components/loading/ImageLoading.vue";
 import { useI18n } from "vue-i18n";
 
 export default {
   name: "RegisterView",
    components: {
-    Alert
+    Alert,
+    ImageLoading
   },
   setup() {
     // Data
@@ -20,6 +22,7 @@ export default {
     });
     const alertData = ref({});
     const showAlert = ref(false);
+    const isLoading = ref(false);
 
     const { t } = useI18n();
     const placeholderName = t("register.name");
@@ -28,12 +31,15 @@ export default {
 
     // Methods
     const sendData = () => {
+      isLoading.value = true;
       axios
         .post(`${callBaseUrl()}/users/`, userData)
         .then((response) => {
+          isLoading.value = false;
           router.push({path: "login", query:{newUser: true}})
         })
         .catch((error) => {
+          isLoading.value = false;
           alertData.value = {
             definition: 'danger',
             message: error.response.data.detail.message,
@@ -49,7 +55,7 @@ export default {
       router.push(view);
     };
 
-    return { userData, alertData, showAlert, placeholderName, placeholderEmail, placeholderPassword, sendData, sendView };
+    return { userData, alertData, showAlert, placeholderName, placeholderEmail, placeholderPassword, isLoading, sendData, sendView };
   },
 };
 </script>
@@ -106,6 +112,7 @@ export default {
         </button>
       </form>
     </main>
+    <image-loading v-if="isLoading" />
   </div>
 </template>
 

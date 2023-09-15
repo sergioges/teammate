@@ -12,3 +12,10 @@ export default {
     <div class="ring-loading-text">{{ $t("loading") }}</div>
   </div>
 </template>
+
+<style scoped>
+.ring-loader {
+  position: relative;
+  left: 15px;
+}
+</style>

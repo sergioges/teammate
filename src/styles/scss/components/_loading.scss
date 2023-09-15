@@ -3,6 +3,9 @@
     position: fixed;
     top: 120px;
     right: 35px;
+    @media (max-width: 768px) {
+        top: 100px;
+    }
 
     .loading-balls {
         width: 150px;

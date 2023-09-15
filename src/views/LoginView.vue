@@ -6,12 +6,14 @@ import { callBaseUrl } from "@/mixin/BaseUrl";
 import { isAuthenticated } from "@/mixin/AuthToken";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import ImageLoading from "@/components/loading/ImageLoading.vue";
 import { useI18n } from "vue-i18n";
 
 export default {
   name: "LoginView",
   components: {
     Alert,
+    ImageLoading
   },
   setup() {
     // Data
@@ -25,6 +27,7 @@ export default {
       message: null,
     });
     const showAlert = ref(false);
+    const isLoading = ref(false);
 
     const { t } = useI18n();
     const placeholderEmail = t("login.email");
@@ -48,12 +51,14 @@ export default {
 
     // Methods
     const sendData = () => {
+      isLoading.value = true;
       axios
         .post(`${callBaseUrl()}/login`, userData)
         .then((response) => {
           const token = response.data.token;
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", response.data.id);
+          isLoading.value = false;
           if (token) {
             router.push({path: "/", query:{newAccess: true}});
           } else {
@@ -61,6 +66,7 @@ export default {
           }
         })
         .catch((error) => {
+          isLoading.value = false;
           alertData.value = {
             definition: "danger",
             message: error.response.data.detail.message,
@@ -76,7 +82,7 @@ export default {
       router.push(view);
     };
 
-    return { userData, alertData, showAlert, placeholderEmail, placeholderPassword, sendData, sendView };
+    return { userData, alertData, showAlert, placeholderEmail, placeholderPassword, isLoading, sendData, sendView };
   },
 };
 </script>
@@ -119,6 +125,7 @@ export default {
         </button>
       </form>
     </main>
+    <image-loading v-if="isLoading" />
   </div>
 </template>
 
