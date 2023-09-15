@@ -4,7 +4,7 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 
 export default {
-  name: "QuestionsLis",
+  name: "QuestionsList",
   props: {
     questions: {
       type: Array,
@@ -16,17 +16,19 @@ export default {
       return payload && typeof payload === "object";
     },
     "update:questions": (payload) => {
-      return payload && typeof payload === "array"
-    } 
+      return payload && typeof payload === "array";
+    },
   },
   setup(props, { emit }) {
     // DATA
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
     const editIndex = ref(null);
+    const questionCapitalized = ref('');
 
     // Methods
-    const startEdit = (index) => {
+    const startEdit = (index, question) => {
       editIndex.value = index;
+      questionCapitalized.value = capitalizeQuestion(question);
     };
 
     const cancelEdit = () => {
@@ -63,7 +65,7 @@ export default {
           }
         )
         .then((response) => {
-          emit('update:questions', response.data);
+          emit("update:questions", response.data);
           editIndex.value = null;
         })
         .catch((error) => {
@@ -71,18 +73,38 @@ export default {
         });
     };
 
+    const capitalizeQuestion = (question) => {
+      const CapitalizeFirstLetter = question.content[0].toUpperCase();
+      const allString = question.content.slice(1);
+      return CapitalizeFirstLetter + allString;
+    };
+
     const copyQuestion = (question) => {
+      const questionCapitalized = capitalizeQuestion(question);
+      question.content = questionCapitalized;
       emit("question-copied", question);
+    };
+
+    const cutQuestion = (question) => {
+      const questionCapitalized = capitalizeQuestion(question);
+      if (questionCapitalized.length <= 70) {
+        return questionCapitalized;
+      } else {
+        return questionCapitalized.slice(0, 70) + " " + "...";
+      }
     };
 
     return {
       userId,
       editIndex,
+      questionCapitalized,
       updateQuestion,
       startEdit,
       cancelEdit,
       copyQuestion,
       deleteQuestion,
+      capitalizeQuestion,
+      cutQuestion,
     };
   },
 };
@@ -94,12 +116,12 @@ export default {
     <ul v-for="(question, index) in questions" :key="index">
       <li>
         <div v-if="editIndex !== index">
-          <span>{{ question.content }}</span>
+          <span>{{ cutQuestion(question) }}</span>
           <img
             class="icon"
             title="Edit"
             src="../../assets/icons/edit-solid-24.png"
-            @click="startEdit(index)"
+            @click="startEdit(index, question)"
           />
           <img
             class="icon"
@@ -118,7 +140,7 @@ export default {
           <input
             style="width: 80%"
             type="text"
-            v-model="question.content"
+            v-model="questionCapitalized"
             label="Press enter to save"
           />
           <img

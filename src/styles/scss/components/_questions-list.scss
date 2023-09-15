@@ -1,10 +1,12 @@
-li {
-    color: white;
-    list-style: none;
-
-    .icon {
-        margin: 0 3px;
-        cursor: pointer;
+ul {
+    list-style-type: square;
+    
+    >li {
+        color: white;
+        
+        .icon {
+            margin: 0 3px;
+            cursor: pointer;
+        }
     }
 }
-

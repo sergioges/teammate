@@ -121,7 +121,7 @@
 
     .questions-list {
         flex-grow: 1;
-        overflow: auto;
+        padding-left: 15px;
     }
 
     .questions-list::-webkit-scrollbar {
