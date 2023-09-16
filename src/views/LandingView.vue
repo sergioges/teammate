@@ -24,6 +24,7 @@ export default {
 
     const { t } = useI18n();
     const placeholder = t("landing.newsletter.placeholder");
+    const modalErrorMessage = t("modal.error.message");
 
     // METHODS
     const sendData = () => {
@@ -41,10 +42,10 @@ export default {
           userData.email = "";
         })
         .catch((error) => {
-          console.log(error.response.data.detail);
+          console.log(error.response.data);
           alertData.value = {
             definition: "danger",
-            message: error.response.data.detail.message,
+            message: modalErrorMessage,
           };
           showAlert.value = true;
           setTimeout(() => {

@@ -23,7 +23,7 @@ export default {
     // DATA
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
     const editIndex = ref(null);
-    const questionCapitalized = ref('');
+    const questionCapitalized = ref("");
 
     // Methods
     const startEdit = (index, question) => {
@@ -36,6 +36,8 @@ export default {
     };
 
     const updateQuestion = (question) => {
+      question.content = questionCapitalized.value;
+
       const headers = {
         Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
       };
@@ -48,7 +50,7 @@ export default {
           editIndex.value = null;
         })
         .catch((error) => {
-          console.log(error.response.data.detail);
+          console.log(error.response.data);
         });
     };
 
@@ -69,7 +71,7 @@ export default {
           editIndex.value = null;
         })
         .catch((error) => {
-          console.log(error.response.data.detail);
+          console.log(error.response.data);
         });
     };
 
@@ -83,6 +85,21 @@ export default {
       const questionCapitalized = capitalizeQuestion(question);
       question.content = questionCapitalized;
       emit("question-copied", question);
+
+      const headers = {
+        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
+      };
+
+      axios
+        .put(`${callBaseUrl()}/questions/${userId.value}`, question, {
+          headers,
+        })
+        .then((response) => {
+          editIndex.value = null;
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
     };
 
     const cutQuestion = (question) => {
@@ -113,8 +130,8 @@ export default {
 <template>
   <div>
     <h2 class="h3 mb-3 fw-normal text-white">{{ $t("chat.inquiries") }}</h2>
-    <ul v-for="(question, index) in questions" :key="index">
-      <li>
+    <ul>
+      <li v-for="(question, index) in questions" :key="index">
         <div v-if="editIndex !== index">
           <span>{{ cutQuestion(question) }}</span>
           <img
@@ -135,6 +152,7 @@ export default {
             src="../../assets/icons/error-circle-solid-24-white.png"
             @click="deleteQuestion(question)"
           />
+          <span class="updated-icon" v-if="question.update">Updated!</span>
         </div>
         <div v-else>
           <input

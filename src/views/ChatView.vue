@@ -87,7 +87,10 @@ export default {
           questions.value = response.data.questions.reverse();
         })
         .catch((error) => {
-          console.log(error.response.data.detail);
+          console.log(error.response.data);
+          if (error.response && error.response.data.code == 401) {
+            router.push("/welcome");
+          }
         });
     };
 

@@ -28,6 +28,7 @@ export default {
     const placeholderName = t("register.name");
     const placeholderEmail = t("register.email");
     const placeholderPassword = t("register.password");
+    const modalErrorMessage = t("modal.error.message");
 
     // Methods
     const sendData = () => {
@@ -42,7 +43,7 @@ export default {
           isLoading.value = false;
           alertData.value = {
             definition: 'danger',
-            message: error.response.data.detail.message,
+            message: modalErrorMessage,
           }
           showAlert.value = true;
           setTimeout(() => {

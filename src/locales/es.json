@@ -3,6 +3,9 @@
     "button": {
       "accept": "Aceptar",
       "cancel": "Cancelar"
+    },
+    "error": {
+      "message": "Algo ha ido mal, inténtalo de nuevo"
     }
   },
   "loading": "Cargando...",

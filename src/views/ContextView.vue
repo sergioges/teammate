@@ -82,8 +82,8 @@ export default {
           imgKeyword.value = response.data.background;
         }
       } catch (error) {
-        console.log(error.response.data.detail);
-        if (error.response && error.response.data.detail.code == 401) {
+        console.log(error.response.data);
+        if (error.response && error.response.data.code == 401) {
           router.push("/welcome");
         }
       }
@@ -105,7 +105,7 @@ export default {
           updateContextAndBackground();
         })
         .catch((error) => {
-          if (error.response && error.response.data.detail.code == 401) {
+          if (error.response && error.response.data.code == 401) {
             router.push("/welcome");
           }
           controlModalError(error);
@@ -125,7 +125,7 @@ export default {
           console.log(response.data);
         })
         .catch((error) => {
-          if (error.response && error.response.data.detail.code == 401) {
+          if (error.response && error.response.data.code == 401) {
             router.push("/welcome");
           }
           controlModalError(error);
@@ -133,7 +133,7 @@ export default {
     };
 
     const controlModalError = (error) => {
-      console.log(error.response.data.detail);
+      console.log(error.response.data);
       IsLoading.value = false;
       modalData.value = {
         title: modalErrorTitle,

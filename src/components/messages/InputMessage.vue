@@ -66,7 +66,7 @@ export default {
             emit("answer-generated", response.data);
           })
           .catch((error) => {
-            console.log(error.response.data.detail);
+            console.log(error.response.data);
           });
       }
     };

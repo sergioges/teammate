@@ -32,6 +32,7 @@ export default {
     const { t } = useI18n();
     const placeholderEmail = t("login.email");
     const placeholderPassword = t("login.password");
+    const modalErrorMessage = t("modal.error.message");
 
     onMounted(() => {
       if (route.query.newUser) {
@@ -44,9 +45,12 @@ export default {
           showAlert.value = false;
         }, 2000);
       };
-      if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
-        router.push({path: "/"});
-      };
+      // TODO check qhy this if does not check the isAuthenticated function
+      // if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
+      //   router.push({path: "context"});
+      // } else {
+      //   router.push('/login');
+      // };
     });
 
     // Methods
@@ -69,7 +73,7 @@ export default {
           isLoading.value = false;
           alertData.value = {
             definition: "danger",
-            message: error.response.data.detail.message,
+            message: modalErrorMessage,
           };
           showAlert.value = true;
           setTimeout(() => {

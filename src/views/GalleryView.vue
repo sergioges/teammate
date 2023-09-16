@@ -71,7 +71,7 @@ export default {
     };
 
     const controlModalError = (error) => {
-      console.log(error.response.data.detail);
+      console.log(error.response.data);
       modalData.value = {
         title: modalErrorTitle,
         content: modalErrorContent,
