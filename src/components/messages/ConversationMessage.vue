@@ -56,7 +56,7 @@ export default {
       copiedIndex,
       getIndexDiv,
       copyContent,
-      formatMessage,
+      formatMessage
     };
   },
 };
@@ -72,30 +72,18 @@ export default {
       <input type="radio" id="male" value="male" v-model="selectedOption" />
       <label for="male">{{ $t("chat.avatar.male") }}</label>
     </div>
-    <ul v-for="(message, index) in conversation" :key="index">
-      <li class="message" :class="message.role === 'user' ? 'right' : 'left'">
-        <div
-          class="icon-wrapper"
-          v-if="message.role === 'assistant' && index != 0"
-        >
-          <span
-            v-if="copiedIndex == index"
-            :style="{ visibility: isVisible ? 'visible' : 'hidden' }"
-            >{{ $t("chat.copied") }}</span
-          >
-          <img
-            @click="copyContent(message.content, index)"
-            title="Copy answer"
-            src="../../assets/icons/copy-alt-grey-24.png"
-          />
+    <ul>
+      <li v-for="(message, index) in conversation" :key="index" class="message"
+        :class="message.role === 'user' ? 'right' : 'left'">
+        <div class="icon-wrapper" v-if="message.role === 'assistant' && index != 0">
+          <span v-if="copiedIndex == index" :style="{ visibility: isVisible ? 'visible' : 'hidden' }">{{ $t("chat.copied")
+          }}</span>
+          <img @click="copyContent(message.content, index)" title="Copy answer"
+            src="../../assets/icons/copy-alt-grey-24.png" />
         </div>
-        <img
-          class="logo"
-          :src="message.role === 'user' ? avatarUser : avatarAssistant"
-          alt=""
-        />
-        <p v-html="formatMessage(message.content)"></p>
+        <img class="logo" :src="message.role === 'user' ? avatarUser : avatarAssistant" alt="" />
         <span v-if="getIndexDiv(index)" id="end-message"></span>
+        <p v-html="formatMessage(message.content)"></p>
       </li>
     </ul>
   </div>

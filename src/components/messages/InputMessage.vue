@@ -15,13 +15,12 @@ export default {
   },
   emits: {
     "question-generated": (payload) => {
-      if (payload && typeof payload === "object") {
-        return payload.role === "user" && payload.content;
-      } else {
-        return false;
-      }
+      return payload && typeof payload === "object";
     },
     "answer-generated": (payload) => {
+      return payload && typeof payload === "object";
+    },
+    "error-generated": (payload) => {
       return payload && typeof payload === "object";
     },
   },
@@ -66,7 +65,7 @@ export default {
             emit("answer-generated", response.data);
           })
           .catch((error) => {
-            console.log(error.response.data);
+            emit("error-generated", error.response.data);
           });
       }
     };

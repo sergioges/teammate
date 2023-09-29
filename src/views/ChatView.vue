@@ -36,7 +36,7 @@ export default {
     const questionCopied = ref({});
 
     nextTick(() => {
-      chatAutoScroll();
+      autoScrollHandler();
       getUserQuestions();
     });
 
@@ -52,25 +52,30 @@ export default {
     const addUserQuestion = (question) => {
       conversation.value.push(question);
       isLoading.value = true;
-      chatAutoScroll();
+      autoScrollHandler();
     };
 
-    const addAssistantAnswer = (answer) => {
+    const addAssistantAnswer = (answer) => {     
       conversation.value.push(answer);
       isLoading.value = false;
-      chatAutoScroll();
       getUserQuestions();
     };
 
-    // TODO Hacer que se  muestre por lo menos las primeras lineas de la conversación con autoscroll
-    const chatAutoScroll = () => {
+    const errorAnswerHandler = (error) => {
+      console.log(error.detail);
+      isLoading.value = false;
+      conversation.value.push({
+        role: "assistant",
+        content: t("modal.error.message"),
+      });
+    };
+
+    const autoScrollHandler = () => {
+      const endMessage = document.getElementById("end-message");
       const container = document.querySelector(".chat-messages");
-      const endMessage = document.querySelector("#end-message");
-      //container.scrollTop = endMessage.offsetTop - container.offsetTop;
-      //container.scrollTop = container.scrollHeight;
       const scrollOptions = {
         behavior: "smooth",
-        block: "end",
+        block: "start",
         inline: "nearest",
       };
       endMessage.scrollIntoView(scrollOptions);
@@ -85,6 +90,7 @@ export default {
         .get(`${callBaseUrl()}/questions/${userId.value}`, { headers })
         .then((response) => {
           questions.value = response.data.questions.reverse();
+          autoScrollHandler();
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -119,7 +125,7 @@ export default {
       logoutIcon,
       addUserQuestion,
       addAssistantAnswer,
-      chatAutoScroll,
+      errorAnswerHandler,
       getUserQuestions,
       addQuestionCopied,
       setLogOut,
@@ -172,6 +178,7 @@ export default {
         :paste-question-copied="questionCopied"
         @question-generated="addUserQuestion"
         @answer-generated="addAssistantAnswer"
+        @error-generated="errorAnswerHandler"
       ></input-message>
     </div>
   </div>
