@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import { isAuthenticated } from "@/mixin/AuthToken";
+import { useImageStore } from "@/store/backgroundImage";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 import ImageLoading from "@/components/loading/ImageLoading.vue";
@@ -33,6 +34,7 @@ export default {
     const placeholderEmail = t("login.email");
     const placeholderPassword = t("login.password");
     const modalErrorMessage = t("modal.error.message");
+    const modalUserInvalid = t("modal.error.user");
 
     onMounted(() => {
       if (route.query.newUser) {
@@ -54,32 +56,42 @@ export default {
     });
 
     // Methods
-    const sendData = () => {
+    const sendData = async () => {
       isLoading.value = true;
-      axios
-        .post(`${callBaseUrl()}/login`, userData)
-        .then((response) => {
-          const token = response.data.token;
+      try {
+        const response = await axios.post(`${callBaseUrl()}/login`, userData);
+        const token = response.data.token;
+        const userId = response.data.id;
+
+        if (token) {
           sessionStorage.setItem("chatgpt-token", token);
-          sessionStorage.setItem("chatgpt-userId", response.data.id);
-          isLoading.value = false;
-          if (token) {
-            router.push({path: "/", query:{newAccess: true}});
+          sessionStorage.setItem("chatgpt-userId", userId);
+          const contextResponse = await axios.get(
+            `${callBaseUrl()}/context/saved/${userId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          if (contextResponse.data.url) {
+            const imageStore = useImageStore();
+            imageStore.setCurrentImage(contextResponse.data.url);
+            router.push({ path: "conversation"});
           } else {
-            router.push("/login");
+            router.push({ path: "context" });
           }
-        })
-        .catch((error) => {
-          isLoading.value = false;
-          alertData.value = {
-            definition: "danger",
-            message: modalErrorMessage,
-          };
-          showAlert.value = true;
-          setTimeout(() => {
-            showAlert.value = false;
-          }, 2000);
-        });
+        } else {
+          router.push("/login");
+        }
+      } catch (error) {
+        const errorStatus = error.response ? error.response.status : "desconocido";
+        isLoading.value = false;
+        alertData.value = {
+          definition: "danger",
+          message: errorStatus === 401 ? modalUserInvalid : modalErrorMessage,
+        };
+        showAlert.value = true;
+        setTimeout(() => {
+          showAlert.value = false;
+        }, 2000);
+      };
     };
 
     const sendView = (view) => {

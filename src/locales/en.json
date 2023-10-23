@@ -5,7 +5,8 @@
       "cancel": "Cancel"
     },
     "error": {
-      "message": "Something was wrong, please try again"
+      "message": "Something was wrong, please try again",
+      "user": "User or email invalid"
     }
   },
   "loading": "Loading...",
@@ -102,8 +103,9 @@
       }
     },
     "choose": "Choose your background image:",
-    "title": "How Can I Help?",
-    "topic": "What do you want to talk about today?",
+    "title": "Customize your workspace",
+    "description": "Explain in as much detail as possible how I can assist you",
+    "topic": "Define the context of the central topic to be addressed:",
     "background": "Tell me what background image you would like to see:",
     "button": "Let's go!"
   },

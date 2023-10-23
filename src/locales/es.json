@@ -5,7 +5,8 @@
       "cancel": "Cancelar"
     },
     "error": {
-      "message": "Algo ha ido mal, inténtalo de nuevo"
+      "message": "Algo ha ido mal, inténtalo de nuevo",
+      "user": "Usuario o email inválido"
     }
   },
   "loading": "Cargando...",
@@ -102,8 +103,9 @@
       }
     },
     "choose": "Escoge la imagen de fondo:",
-    "title": "¿En qué puedo ayudarte?",
-    "topic": "¿De qué quieres hablar hoy?",
+    "title": "Personaliza tu entorno de trabajo",
+    "description": "Explícame de la forma más detallada posible como te puedo ayudar",
+    "topic": "Define el contexto del tema central a tratar:",
     "background": "Dime que imagen de fondo te gustaría ver:",
     "button": "¡Vamos allá!"
   },

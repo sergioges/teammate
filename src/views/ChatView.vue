@@ -9,6 +9,9 @@ import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import { useI18n } from "vue-i18n";
+import conversation from "@/mocks/conversation";
+
+const MOCK_CONVERSATION = conversation;
 
 export default {
   name: "ChatView",
@@ -139,7 +142,7 @@ export default {
 <template>
   <div
     class="app-wrapper"
-    :style="{ backgroundImage: 'url(' + currentImage.image.url + ')' }"
+    :style="{ backgroundImage: 'url(' + currentImage + ')' }"
   >
     <div class="header-container">
       <img src="../assets/logo_name.png" alt="" />
