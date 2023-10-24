@@ -3,6 +3,7 @@ import { ref } from "vue";
 import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { defineConversationRoute } from "@/mixin/RouteControl";
 import Modal from "@/components/library/Modal.vue";
 import ShowGallery from "@/components/gallery/ShowGallery.vue";
 import { useI18n } from "vue-i18n";
@@ -67,7 +68,7 @@ export default {
     };
 
     const backChat = () => {
-      router.push("/conversation");
+      router.push(`${defineConversationRoute()}`);
     };
 
     const controlModalError = (error) => {

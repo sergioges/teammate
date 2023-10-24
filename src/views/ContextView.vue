@@ -2,6 +2,7 @@
 import ImageLoading from "@/components/loading/ImageLoading.vue";
 import Modal from "@/components/library/Modal.vue";
 import router from "@/router/router";
+import { defineConversationRoute, defineLandingRoute } from "@/mixin/RouteControl";
 import { useImageStore } from "@/store/backgroundImage";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
@@ -17,7 +18,7 @@ export default {
   setup() {
     onMounted(() => {
       if (!sessionStorage.getItem("chatgpt-token")) {
-        router.push("/welcome");
+        router.push(`${defineLandingRoute()}`);
       } else {
         getContextAndBackground();
       }
@@ -56,7 +57,7 @@ export default {
       } catch (error) {
         console.log(error.response.data);
         if (error.response && error.response.data.code == 401) {
-          router.push("/welcome");
+          router.push(`${defineLandingRoute()}`);
         }
       }
     };
@@ -78,7 +79,7 @@ export default {
         })
         .catch((error) => {
           if (error.response && error.response.data.code == 401) {
-            router.push("/welcome");
+            router.push(`${defineLandingRoute()}`);
           }
           controlModalError(error);
         });
@@ -98,11 +99,11 @@ export default {
           { headers }
         )
         .then((response) => {
-          router.push("/conversation");
+          router.push(`${defineConversationRoute()}`);
         })
         .catch((error) => {
           if (error.response && error.response.data.code == 401) {
-            router.push("/welcome");
+            router.push(`${defineLandingRoute()}`);
           }
           controlModalError(error);
         });

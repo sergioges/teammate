@@ -3,6 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { defineConversationRoute } from "@/mixin/RouteControl";
 import { isAuthenticated } from "@/mixin/AuthToken";
 import { useImageStore } from "@/store/backgroundImage";
 import router from "@/router/router";
@@ -73,7 +74,7 @@ export default {
           if (contextResponse.data.url) {
             const imageStore = useImageStore();
             imageStore.setCurrentImage(contextResponse.data.url);
-            router.push({ path: "conversation"});
+            router.push({ path: `${defineConversationRoute()}`});
           } else {
             router.push({ path: "context" });
           }

@@ -12,7 +12,7 @@ import GalleryView from '@/views/GalleryView.vue'
 import LandingView from '@/views/LandingView.vue'
 
 const routes = [{
-        path: '/',
+        path: '/context',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -20,7 +20,7 @@ const routes = [{
         }
     },
     {
-        path: '/conversation',
+        path: '/',
         name: 'Conversation',
         component: ChatView,
         meta: {

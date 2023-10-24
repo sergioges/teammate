@@ -8,6 +8,7 @@ import { ref, nextTick, computed, onMounted } from "vue";
 import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { defineLandingRoute } from "@/mixin/RouteControl";
 import { useI18n } from "vue-i18n";
 import conversation from "@/mocks/conversation";
 
@@ -98,7 +99,7 @@ export default {
         .catch((error) => {
           console.log(error.response.data);
           if (error.response && error.response.data.code == 401) {
-            router.push("/welcome");
+            router.push(`${defineLandingRoute()}`);
           }
         });
     };
@@ -111,7 +112,7 @@ export default {
       sessionStorage.removeItem("chatgpt-userId");
       sessionStorage.removeItem("background-image");
       sessionStorage.removeItem("chatgpt-token");
-      router.push("/");
+      router.push(`${defineLandingRoute()}`);
     };
 
     const sendView = (view) => {
@@ -153,7 +154,7 @@ export default {
         <div class="gallery-button btn btn-primary" @click="sendView('/gallery')">
           {{ $t("chat.button.gallery") }}
         </div>
-        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/')">
+        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/context')">
           {{ $t("chat.button.context") }}
         </div>
       </div>
