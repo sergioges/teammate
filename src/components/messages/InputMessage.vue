@@ -29,7 +29,9 @@ export default {
     const question = ref({
       role: "user",
       content: "",
+      update: null
     });
+    const copiedQuestion = ref({});
 
     const { t } = useI18n();
 
@@ -47,6 +49,7 @@ export default {
         emit("question-generated", {
           role: "user",
           content: question.value.content,
+          update: question.value.update
         });
         const headers = {
           Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
@@ -70,10 +73,23 @@ export default {
       }
     };
 
+    // Update the question if it is copied and keep the copied values (content and update) 
     watch(
       () => props.pasteQuestionCopied,
       (newValue) => {
         question.value.content = newValue.content;
+        copiedQuestion.value.content = newValue.content;
+        copiedQuestion.value.update = newValue.update;
+        if (newValue.update != null) question.value.update = newValue.update;
+      }
+    );
+
+    // Control and keep the update value if the copy/paste question it is modified
+    watch(
+      () => question.value.content,
+      (newValue, oldValue) => {
+        if (oldValue != "" && newValue != oldValue) question.value.update = null;
+        if (newValue == copiedQuestion.value.content) question.value.update = copiedQuestion.value.update;
       }
     );
 

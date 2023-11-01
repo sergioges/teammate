@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "QuestionsList",
@@ -16,11 +17,12 @@ export default {
       return payload && typeof payload === "object";
     },
     "update:questions": (payload) => {
-      return payload && typeof payload === "array";
+      return payload && typeof payload === "object";
     },
   },
   setup(props, { emit }) {
     // DATA
+    const { t } = useI18n();
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
     const editIndex = ref(null);
     const questionCapitalized = ref("");
@@ -85,21 +87,6 @@ export default {
       const questionCapitalized = capitalizeQuestion(question);
       question.content = questionCapitalized;
       emit("question-copied", question);
-
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
-
-      axios
-        .put(`${callBaseUrl()}/questions/${userId.value}`, question, {
-          headers,
-        })
-        .then((response) => {
-          editIndex.value = null;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
     };
 
     const cutQuestion = (question) => {
@@ -109,6 +96,45 @@ export default {
       } else {
         return questionCapitalized.slice(0, 70) + " " + "...";
       }
+    };
+
+    const improveQuestion = (question) => {
+      question.loadingHandler = true;
+      question.errorHandler = false;
+      const headers = {
+        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
+      };
+
+      const languageDict = {
+        es: "spanish",
+        en: "english",
+        fr: "french"
+      }
+      const languageSystem = window.navigator.language.substring(0, 2);
+
+      let languageContext;
+      if (!languageDict[languageSystem]) {
+        languageContext = languageDict.en
+      } else {
+        languageContext = languageDict[languageSystem]
+      }
+
+      question.language = languageContext;
+      delete question.role;
+
+      axios
+        .put(`${callBaseUrl()}/questions/improve/${userId.value}`, question, {
+          headers,
+        })
+        .then((response) => {
+          emit("update:questions", response.data);
+          question.loadingHandler = false;
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          question.errorHandler = true;
+          question.loadingHandler = false;
+        });
     };
 
     return {
@@ -122,6 +148,7 @@ export default {
       deleteQuestion,
       capitalizeQuestion,
       cutQuestion,
+      improveQuestion
     };
   },
 };
@@ -133,46 +160,24 @@ export default {
     <ul>
       <li v-for="(question, index) in questions" :key="index">
         <div v-if="editIndex !== index">
-          <span>{{ cutQuestion(question) }}</span>
-          <img
-            class="icon"
-            title="Edit"
-            src="../../assets/icons/edit-solid-24.png"
-            @click="startEdit(index, question)"
-          />
-          <img
-            class="icon"
-            title="Copy"
-            src="../../assets/icons/copy-alt-solid-24.png"
-            @click="copyQuestion(question)"
-          />
-          <img
-            class="icon"
-            title="Delete"
-            src="../../assets/icons/error-circle-solid-24-white.png"
-            @click="deleteQuestion(question)"
-          />
-          <span class="updated-icon" v-if="question.update">Updated!</span>
+          <span style="cursor: help;" :title="question.content">{{ cutQuestion(question) }}</span>
+          <img class="icon" title="Edit" src="../../assets/icons/edit-solid-24.png" @click="startEdit(index, question)" />
+          <img class="icon" title="Copy" src="../../assets/icons/copy-alt-solid-24.png" @click="copyQuestion(question)" />
+          <img class="icon" title="Delete" src="../../assets/icons/error-circle-solid-24-white.png"
+            @click="deleteQuestion(question)" />
+          <div v-if="!question.update">
+            <span class="improved-tag" @click="improveQuestion(question)">{{ $t("questions.improve") }}</span> 
+            <span v-if="question.loadingHandler" class="loader"></span>
+            <span v-if="question.errorHandler" class="error-message">Prueba de nuevo</span>
+          </div>
+          <div v-else>
+            <span class="updated-tag">{{ $t("questions.updated") }}</span>
+          </div>
         </div>
         <div v-else>
-          <input
-            style="width: 80%"
-            type="text"
-            v-model="questionCapitalized"
-            label="Press enter to save"
-          />
-          <img
-            class="icon"
-            title="Update"
-            src="../../assets/icons/save-solid-24.png"
-            @click="updateQuestion(question)"
-          />
-          <img
-            class="icon"
-            title="Cancel"
-            src="../../assets/icons/x-square-solid-24.png"
-            @click="cancelEdit()"
-          />
+          <input style="width: 80%" type="text" v-model="questionCapitalized" label="Press enter to save" />
+          <img class="icon" title="Update" src="../../assets/icons/save-solid-24.png" @click="updateQuestion(question)" />
+          <img class="icon" title="Cancel" src="../../assets/icons/x-square-solid-24.png" @click="cancelEdit()" />
         </div>
       </li>
     </ul>
