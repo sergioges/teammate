@@ -47,24 +47,3 @@ ul {
 
 
 
-.loader {
-    border: 3px solid rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    border-top: 3px solid #fff;
-    width: 20px;
-    height: 20px;
-    animation: spin-38fc9c1d 2s linear infinite;
-    margin: 0 auto;
-    margin-left: 5px;
-    margin-top: 2px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}

@@ -167,7 +167,7 @@ export default {
             @click="deleteQuestion(question)" />
           <div v-if="!question.update">
             <span class="improved-tag" @click="improveQuestion(question)">{{ $t("questions.improve") }}</span> 
-            <span v-if="question.loadingHandler" class="loader"></span>
+            <span v-if="question.loadingHandler" id="loader-question"></span>
             <span v-if="question.errorHandler" class="error-message">Prueba de nuevo</span>
           </div>
           <div v-else>
