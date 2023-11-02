@@ -1,0 +1,153 @@
+{
+  "modal": {
+    "button": {
+      "accept": "Aceptar",
+      "cancel": "Cancelar"
+    },
+    "error": {
+      "message": "Algo ha ido mal, inténtalo de nuevo",
+      "user": "Usuario o email inválido"
+    }
+  },
+  "loading": "Cargando...",
+  "thinking": "Pensando",
+  "landing": {
+    "title": "Teammate",
+    "subtitle": "Tu Asistente Profesional",
+    "description01": "Teammate, tu nuevo asistente profesional se aprovecha de las ventajas de la ",
+    "chatgpt": "inteligencia artificial de chatGPT.",
+    "description02": "Prepárate para una solución todo en uno que aumenta tu productividad y eficiencia. Saluda a tu nuevo compañero de confianza para todas tus necesidades profesionales.",
+    "author": "Con el motor de chatGPT",
+    "button": {
+      "register": "Regístrate",
+      "login": "Inicia sesión"
+    },
+    "promo": {
+      "new": {
+        "title": "Nuevo",
+        "text": "Aprovecha la tecnología vanguardista e innovadora de la inteligencia artificial de chatGPT, brindando una experiencia fresca y moderna."
+      },
+      "professional": {
+        "title": "Profesional",
+        "text": "Confía en una solución integral cualificada, hábil y competente, que fomente la productividad y la eficiencia."
+      },
+      "all": {
+        "title": "Todo-en-uno",
+        "text": "Experimenta un asistente completo y versátil, integrado con una galería de alta calidad, asegurando un soporte completo y unificado."
+      },
+      "trusted": {
+        "title": "Confiable",
+        "text": "Con una reputación probada y confiable, chatGPT se convierte en tu compañero confiable y estimado, ganándose tu confianza."
+      }
+    },
+    "discover": {
+      "title": "Descubre",
+      "text01": "Descubre cómo ",
+      "chatgpt": "la tecnología de chatGPT ",
+      "text02": "puede ser tu aliado perfecto para potenciar tu negocio en la generación de ideas y contenido originales y personalizados, todo con un simple clic. Adicionalmente ",
+      "images": "accede a una gran cantidad de imágenes de alta calidad, ",
+      "text03": "asegurando que tus mensajes lleguen exactamente donde pretendes con un esfuerzo mínimo."
+    },
+    "comments": {
+      "title": "Personas hablando de ",
+      "hash": "#teammate",
+      "text": "Únete a nuestra aventura #teammate. ¡Descubre todo lo que puede hacer por tu negocio!"
+    },
+    "simple": {
+      "title": "La mejor UI",
+      "easy": "Fácil de utilizar",
+      "always": "Siempre disponible",
+      "personal": "interfaz personalizable",
+      "image": "Imágenes de alta calidad",
+      "inquiry": "Mantén tus consultas"
+    },
+    "newsletter": {
+      "title": "¿Quieres Saber más?",
+      "placeholder": "Escribe tu email",
+      "description": "Si deseas saber más sobre la aplicación y cómo obtener más para tu negocio, estaré encantado de ayudarte."
+    }
+  },
+  "register": {
+    "title": "Por favor, regístrate",
+    "name": "Tu nombre",
+    "email": "Dirección de email",
+    "password": "Tu contraseña",
+    "button": {
+      "register": "Regístrate",
+      "user": "¿Ya eres usuario?"
+    }
+  },
+  "login": {
+    "title": "Por favor, inicia sesión",
+    "email": "Dirección de email",
+    "password": "Contraseña",
+    "button": {
+      "login": "Inicia sesión",
+      "user": "¿Todavía no te has registrado?"
+    }
+  },
+  "context": {
+    "modal": {
+      "title": "¿Continuarás con el mismo tema?",
+      "content01": "En tu última visita, lo dejaste así:",
+      "content02": "CONTEXTO",
+      "content03": "IMAGEN FONDO",
+      "content04": "¿Quieres mantenerlo?",
+      "button": {
+        "accept": "Sí, así es",
+        "cancel": "Cancelar"
+      },
+      "error": {
+        "title": "Algo ha ido mal",
+        "content": "Una disculpa por el inconveniente, inténtalo de nuevo."
+      }
+    },
+    "choose": "Escoge la imagen de fondo:",
+    "title": "Personaliza tu entorno de trabajo",
+    "description": "Explícame de la forma más detallada posible como te puedo ayudar",
+    "topic": "Define el contexto del tema central a tratar:",
+    "background": "Dime que imagen de fondo te gustaría ver:",
+    "button": "¡Vamos allá!"
+  },
+  "chat": {
+    "inquiries": "Tus consultas",
+    "input": "Escribe tu consulta y presiona Enviar",
+    "requiredInput": "Por favor, no olvides enviar tu consulta",
+    "avatar": {
+      "title": "Tu avatar",
+      "female": "Mujer",
+      "male": "Hombre"
+    },
+    "welcome": "¡Hola! ¿En qué puedo ayudarte hoy?",
+    "copied": "¡Texto copiado!",
+    "button": {
+      "context": "Nuevo Contexto",
+      "gallery": "Galería",
+      "logout": "Cerrar",
+      "send": "Enviar"
+    }
+  },
+  "gallery" : {
+    "input": "¿Qué te gustaría encontrar?",
+    "button": {
+      "search": "Buscar",
+      "back": "Atrás",
+      "more": "Más imágenes...",
+      "profile": "Visitar perfil",
+      "download": "Descargar",
+      "close": "Cerrar"
+    },
+    "author": "Autor:",
+    "empty": "Lo siento, no encontramos la imagen que buscabas",
+    "modal": {
+      "error": {
+        "title": "Algo ha ido mal",
+        "content": "Una disculpa por el inconveniente, inténtalo de nuevo."
+      }
+    }
+  },
+  "questions": {
+    "improve": "¿Mejorar?",
+    "updated": "¡Actualizado!"
+  }
+}

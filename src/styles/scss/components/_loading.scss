@@ -1,8 +1,11 @@
 
 .chat-loading-container {
     position: fixed;
-    top: 95px;
+    top: 120px;
     right: 35px;
+    @media (max-width: 768px) {
+        top: 100px;
+    }
 
     .loading-balls {
         width: 150px;
@@ -72,6 +75,18 @@
     width: 80px;
     height: 80px;
     animation: giro 1s linear infinite;
+}
+
+#loader-question {
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    border-top: 3px solid #fff;
+    width: 20px;
+    height: 20px;
+    animation: giro 2s linear infinite;
+    margin: 0 auto;
+    margin-left: 5px;
+    margin-top: 2px;
 }
 
 @keyframes giro {

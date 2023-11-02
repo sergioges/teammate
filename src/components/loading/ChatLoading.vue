@@ -7,7 +7,7 @@ export default {
 <template>
   <div class="chat-loading-container">
     <div class="loading-balls">
-      <span class="loading-text">Pensando </span>
+      <span class="loading-text">{{ $t("thinking") }} </span>
       <div class="balls"></div>
       <div class="balls"></div>
       <div class="balls"></div>

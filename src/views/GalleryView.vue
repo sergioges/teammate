@@ -3,8 +3,10 @@ import { ref } from "vue";
 import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { defineConversationRoute } from "@/mixin/RouteControl";
 import Modal from "@/components/library/Modal.vue";
 import ShowGallery from "@/components/gallery/ShowGallery.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "GalleryView",
@@ -24,6 +26,11 @@ export default {
     };
     const modalData = ref({});
     const noImages = ref(false);
+
+    const { t } = useI18n();
+    const placeholderInput = t("gallery.input");
+    const modalErrorTitle = t("gallery.modal.error.title");
+    const modalErrorContent = t("gallery.modal.error.content");
 
     //METHODS
     const getFirstImages = () => {
@@ -61,14 +68,14 @@ export default {
     };
 
     const backChat = () => {
-        router.push("/conversation");
+      router.push(`${defineConversationRoute()}`);
     };
 
     const controlModalError = (error) => {
-      console.log(error.response.data.detail);
+      console.log(error.response.data);
       modalData.value = {
-        title: "Something went wrong",
-        content: "Sorry for the inconvenience, please try again.",
+        title: modalErrorTitle,
+        content: modalErrorContent,
       };
     };
 
@@ -80,6 +87,7 @@ export default {
       nextPage,
       modalData,
       noImages,
+      placeholderInput,
       getFirstImages,
       getNextImages,
       getImage,
@@ -96,6 +104,7 @@ export default {
       :selectedImage="selectedImage"
       :titleImage="titleImage"
     ></show-gallery>
+
     <section class="navbar">
       <img src="../assets/logo_name.png" alt="" />
       <div class="container-search">
@@ -108,19 +117,17 @@ export default {
             v-model="query"
             class="input-search form-control me-2"
             type="search"
-            placeholder="Want do you want to find?"
+            :placeholder="placeholderInput"
             aria-label="Search"
             required
           />
-          <button class="btn btn-primary" type="submit">
-            Search
-          </button>
-          <div class="btn btn-primary" @click="backChat()">Back</div>
+          <button class="btn btn-primary" type="submit">{{ $t("gallery.button.search") }}</button>
+          <div class="btn btn-primary" @click="backChat()">{{ $t("gallery.button.back") }}</div>
         </form>
       </div>
     </section>
 
-    <section class="grid-gallery" v-if="!noImages">
+    <div class="grid-gallery" v-if="!noImages">
       <a
         class="grid-gallery__item"
         v-for="(image, index) in images"
@@ -132,18 +139,19 @@ export default {
           @click="getImage(image)"
         />
       </a>
-    </section>
-    <h2 class="h2 mb-3 fw-normal text-center" v-else>There is no results</h2>
+    </div>
+    <h2 class="h2 mb-3 fw-normal text-center" v-else>{{ $t("gallery.empty") }}</h2>
 
-    <section class="more-button" v-if="nextPage.url">
+    <div class="more-button" v-if="nextPage.url">
       <button
         type="button"
         class="btn btn-outline-secondary"
         @click="getNextImages"
       >
-        More images...
+      {{ $t("gallery.button.more") }}
       </button>
-    </section>
+    </div>
+    <div class="white-space" v-else></div>
   </div>
 </template>
 

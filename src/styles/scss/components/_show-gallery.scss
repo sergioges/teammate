@@ -52,10 +52,14 @@
     content: var(--download-icon);
     position: relative;
     top: 5px;
+    left: 5px;
+    right: -5px;
 }
 
 #example-gallery-modal > div > div > div.modal-footer > button:nth-child(2)::after {
     content: var(--close-icon);
     position: relative;
     top: 5px;
+    left: 5px;
+    right: -5px;
 }

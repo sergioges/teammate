@@ -1,10 +1,46 @@
 .text_input {
-    font-size: 16px;
+    font-size: 18px;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 10px 15px;
     width: 100%;
     border: none;
+}
+
+.text_textarea {
+    height: 45px;
+    border-radius: 0px;
+    resize: vertical;
+
+    &::placeholder {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @media (max-width: 768px) {
+        height: 55px;
+    }
+}
+
+.send-button {
+    position: relative;
+    float: right;
+    padding-right: 35px;
+    background-color: #006880 !important;
+    border: none;
+    border-radius: 0px;
+
+    & {
+        position: relative;
+    
+        &::after {
+            content: var(--send-icon);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(40%, -40%);
+        }
+    }
 }

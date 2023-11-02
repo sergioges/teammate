@@ -4,11 +4,14 @@ import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
+import ImageLoading from "@/components/loading/ImageLoading.vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "RegisterView",
    components: {
-    Alert
+    Alert,
+    ImageLoading
   },
   setup() {
     // Data
@@ -19,18 +22,28 @@ export default {
     });
     const alertData = ref({});
     const showAlert = ref(false);
+    const isLoading = ref(false);
+
+    const { t } = useI18n();
+    const placeholderName = t("register.name");
+    const placeholderEmail = t("register.email");
+    const placeholderPassword = t("register.password");
+    const modalErrorMessage = t("modal.error.message");
 
     // Methods
     const sendData = () => {
+      isLoading.value = true;
       axios
         .post(`${callBaseUrl()}/users/`, userData)
         .then((response) => {
+          isLoading.value = false;
           router.push({path: "login", query:{newUser: true}})
         })
         .catch((error) => {
+          isLoading.value = false;
           alertData.value = {
             definition: 'danger',
-            message: error.response.data.detail.message,
+            message: modalErrorMessage,
           }
           showAlert.value = true;
           setTimeout(() => {
@@ -39,7 +52,11 @@ export default {
         });
     };
 
-    return { userData, alertData, showAlert, sendData };
+    const sendView = (view) => {
+      router.push(view);
+    };
+
+    return { userData, alertData, showAlert, placeholderName, placeholderEmail, placeholderPassword, isLoading, sendData, sendView };
   },
 };
 </script>
@@ -47,23 +64,23 @@ export default {
 <template>
   <div class="login py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-      <img src="../assets/logo_complete.png" alt="" width="200" height="200" />
+      <img src="../assets/logo_complete.png" alt="" width="200" height="200" @click="sendView('/')" />
       <alert
         v-if="showAlert"
         :alert-data="alertData"
       ></alert>
       <form @submit.prevent="sendData">
-        <h1 class="h3 mb-3 fw-normal">Please Register</h1>
+        <h1 class="h3 mb-3 fw-normal">{{ $t("register.title") }}</h1>
         <div class="form-floating">
           <input
             v-model="userData.name"
             type="text"
             class="form-control"
             id="userName"
-            placeholder="Your name"
+            :placeholder="placeholderName"
             required
           />
-          <label for="floatingInput">Your name</label>
+          <label for="floatingInput">{{ $t("register.name") }}</label>
         </div>
         <div class="form-floating">
           <input
@@ -71,10 +88,10 @@ export default {
             type="email"
             class="form-control"
             id="userEmail"
-            placeholder="name@example.com"
+            :placeholder="placeholderEmail"
             required
           />
-          <label for="userEmail">Email address</label>
+          <label for="userEmail">{{ $t("register.email") }}</label>
         </div>
         <div class="form-floating">
           <input
@@ -82,20 +99,21 @@ export default {
             type="password"
             class="form-control"
             id="userPassword"
-            placeholder="Password"
+            :placeholder="placeholderPassword"
             required
           />
-          <label for="userPassword">Password</label>
+          <label for="userPassword">{{ $t("register.password") }}</label>
         </div>
 
         <button class="btn btn-primary w-100 py-2" type="submit">
-          Register
+          {{ $t("register.button.register") }}
         </button>
-        <div class="mt-3 mb-3 text-body-secondary">
-          <router-link class="link-register" to="/login">Are you a user?</router-link>
-        </div>
+        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/login')">
+          {{ $t("register.button.user") }}
+        </button>
       </form>
     </main>
+    <image-loading v-if="isLoading" />
   </div>
 </template>
 

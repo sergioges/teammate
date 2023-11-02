@@ -2,11 +2,12 @@
 import ImageLoading from "@/components/loading/ImageLoading.vue";
 import Modal from "@/components/library/Modal.vue";
 import router from "@/router/router";
-import { useRoute } from "vue-router";
+import { defineConversationRoute, defineLandingRoute } from "@/mixin/RouteControl";
 import { useImageStore } from "@/store/backgroundImage";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
 import { ref, computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "ContextView",
@@ -15,19 +16,18 @@ export default {
     Modal,
   },
   setup() {
-    const route = useRoute();
     onMounted(() => {
       if (!sessionStorage.getItem("chatgpt-token")) {
-        router.push("/login");
+        router.push(`${defineLandingRoute()}`);
       } else {
         getContextAndBackground();
       }
     });
     // Data
+    const { t } = useI18n();
     const contextKeyword = ref("");
     const imgKeyword = ref("");
-    const contextDatabase = ref("");
-    const imgDatabase = ref("");
+    const imgUrlDataBase = ref("");
     const images = ref([]);
     const IsLoading = ref(false);
     const modalData = ref({});
@@ -36,6 +36,12 @@ export default {
     const headers = {
       Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}` || "",
     };
+
+    // TRANSLATION
+    const modalErrorTitle = t("context.modal.error.title");
+    const modalErrorContent = t("context.modal.error.content");
+    const placeholderTopic = t("context.topic");
+    const placeholderBackground = t("context.background");
 
     // Methods
     const getContextAndBackground = async () => {
@@ -46,30 +52,13 @@ export default {
           )}`,
           { headers }
         );
-        if (route.query.newAccess) {
-          modalData.value = {
-            title: "Are we continuing with the same topic?",
-            content: `<p>In your last visit, you left it as:</p>
-            <ul>
-              <li><strong>CONTEXT - </strong> ${response.data.content}</li>
-              <li><strong>BACKGROUND - </strong> ${response.data.background}</li>
-            </ul>
-            <p>Do you want to keep it?</p>
-          `,
-          };
-          acceptButton.value = {
-            active: true,
-            action: "Yes, I do",
-          };
-          contextDatabase.value = response.data.content;
-          imgDatabase.value = response.data.background;
-        } else {
-          contextKeyword.value = response.data.content;
-          imgKeyword.value = response.data.background;
-        }
+        contextKeyword.value = response.data.content;
+        imgKeyword.value = response.data.background;
       } catch (error) {
-        console.log(error.response.data.detail);
-        // TODO si es un 401 devolver al login
+        console.log(error.response.data);
+        if (error.response && error.response.data.code == 401) {
+          router.push(`${defineLandingRoute()}`);
+        }
       }
     };
 
@@ -80,58 +69,62 @@ export default {
         role: "system",
         content: contextKeyword.value,
         background: imgKeyword.value,
+        url: imgUrlDataBase.value
       };
       axios
         .post(`${callBaseUrl()}/context/`, context.value, { headers })
         .then((response) => {
           images.value = response.data;
           IsLoading.value = false;
-          updateContextAndBackground();
         })
         .catch((error) => {
+          if (error.response && error.response.data.code == 401) {
+            router.push(`${defineLandingRoute()}`);
+          }
           controlModalError(error);
-          // TODO si es un 401 devolver al login
         });
     };
 
-    const updateContextAndBackground = () => {
+    const updateContextAndBackground = (url) => {
+      const imageUpdated = {
+        ...context.value,
+        url
+      }
       axios
         .post(
           `${callBaseUrl()}/context/saved/${sessionStorage.getItem(
             "chatgpt-userId"
           )}`,
-          context.value,
+          imageUpdated,
           { headers }
         )
         .then((response) => {
-          console.log(response.data);
+          router.push(`${defineConversationRoute()}`);
         })
         .catch((error) => {
+          if (error.response && error.response.data.code == 401) {
+            router.push(`${defineLandingRoute()}`);
+          }
           controlModalError(error);
-          // TODO si es un 401 devolver al login
         });
     };
 
     const controlModalError = (error) => {
-      console.log(error.response.data.detail);
+      console.log(error.response.data);
       IsLoading.value = false;
       modalData.value = {
-        title: "Something went wrong",
-        content: "Sorry for the inconvenience, please try again.",
+        title: modalErrorTitle,
+        content: modalErrorContent,
+      };
+      acceptButton.value = {
+        active: false
       };
     };
 
-    const getImage = (image) => {
+    const getImage = (imageUrl) => {
       const imageStore = useImageStore();
-      imageStore.setCurrentImage(image);
-      router.push("/conversation");
-    };
-
-    const modalResponse = (response) => {
-      if (response) {
-        contextKeyword.value = contextDatabase.value;
-        imgKeyword.value = imgDatabase.value;
-      }
+      imageStore.setCurrentImage(imageUrl);
+      updateContextAndBackground(imageUrl);
     };
 
     return {
@@ -141,9 +134,10 @@ export default {
       IsLoading,
       modalData,
       acceptButton,
+      placeholderTopic,
+      placeholderBackground,
       sendContext,
       getImage,
-      modalResponse,
     };
   },
 };
@@ -152,25 +146,25 @@ export default {
 <template>
   <div class="context d-flex align-items-center bg-body-tertiary">
     <modal
-      :modal-data="modalData"
-      :accept-button="acceptButton"
-      @modal-response="modalResponse"
-    ></modal>
+        :modal-data="modalData"
+        :accept-button="acceptButton"
+      ></modal>
     <main class="form-context w-100 m-auto">
       <div class="gallery">
         <h2 class="h3 mb-3 mt-3 fw-normal" v-if="images.length > 0">
-          Choose your background image:
+          {{ $t("context.choose") }}
         </h2>
-        <div class="image" v-for="(image, index) in images" :key="index">
+        <div class="image" v-for="(imageData, index) in images" :key="index">
           <img
-            :src="image.image.url"
-            :alt="image.image.description"
-            @click="getImage(image)"
+            :src="imageData.image.url"
+            :alt="imageData.image.description"
+            @click="getImage(imageData.image.url)"
           />
         </div>
       </div>
       <image-loading v-if="IsLoading" />
-      <h1 class="h3 mb-3 mt-3 fw-normal">How Can I Help?</h1>
+      <h1 class="h3 mb-3 mt-3 fw-normal">{{ $t("context.title") }}</h1>
+      <p class="description">{{ $t("context.description") }}</p>
       <!-- TODO Structure for inject code format -->
       <!-- <pre style="background-color: grey"><code>{{ contextPre }}</code></pre> -->
       <form @submit.prevent="sendContext">
@@ -181,10 +175,10 @@ export default {
             class="form-control"
             id="contextKeyword"
             name="contextKeyword"
-            placeholder="What do you want to talk about today?"
+            :placeholder="placeholderTopic"
           />
           <label for="floatingInput"
-            >What do you want to talk about today?</label
+            >{{ placeholderTopic }}</label
           >
         </div>
         <div class="form-floating">
@@ -194,14 +188,14 @@ export default {
             class="form-control"
             id="imgKeyword"
             name="imgKeyword"
-            placeholder="Tell me what background image you would like to see"
+            :placeholder="placeholderBackground"
           />
           <label for="imgKeyword"
-            >Tell me what background image you would like to see:</label
+            >{{ placeholderBackground }}</label
           >
         </div>
         <button class="btn btn-primary w-100 py-2" type="submit">
-          Let's go!
+          {{ $t("context.button") }}
         </button>
       </form>
     </main>

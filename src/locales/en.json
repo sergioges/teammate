@@ -1,0 +1,153 @@
+{
+  "modal": {
+    "button": {
+      "accept": "Accept",
+      "cancel": "Cancel"
+    },
+    "error": {
+      "message": "Something was wrong, please try again",
+      "user": "User or email invalid"
+    }
+  },
+  "loading": "Loading...",
+  "thinking": "Thinking",
+  "landing": {
+    "title": "Teammate",
+    "subtitle": "Your Professional Assistant",
+    "description01": "Teammate, your new professional assistant, taps into the technology of ",
+    "chatgpt": "chatGPT's artificial intelligence.",
+    "description02": "Get ready for an all-in-one solution that boosts your productivity and efficiency. Say hello to your new trusted companion for all your professional needs.",
+    "author": "With chatGPT engine",
+    "button": {
+      "register": "Register",
+      "login": "Log in"
+    },
+    "promo": {
+      "new": {
+        "title": "New",
+        "text": "Embrace the cutting-edge and innovative technology of chatGPT's artificial intelligence, delivering a fresh and modern experience."
+      },
+      "professional": {
+        "title": "Professional",
+        "text": "Rely on a qualified, skilled, and proficient all-in-one solution, fostering productivity and efficiency."
+      },
+      "all": {
+        "title": "All-in-one",
+        "text": "Experience a comprehensive and versatile assistant, integrated with high-quality gallery, ensuring complete and unified support."
+      },
+      "trusted": {
+        "title": "trusted",
+        "text": "With a proven and dependable reputation, chatGPT becomes your reliable and esteemed companion, earning your trust."
+      }
+    },
+    "discover": {
+      "title": "Discover",
+      "text01": "Discover how ",
+      "chatgpt": "chatGPT technology ",
+      "text02": "can be your perfect ally to empower your business in generating original and personalized ideas and content, all with a simple click. Additionally, ",
+      "images": "access a vast number of high-quality images, ",
+      "text03": "ensuring your messages reach precisely where you intend with minimal effort."
+    },
+    "comments": {
+      "title": "People talking about ",
+      "hash": "#teammate",
+      "text": "Join our #teammate adventure. Discover everything it can do for your business!"
+    },
+    "simple": {
+      "title": "The easiest UI",
+      "easy": "Easy to use",
+      "always": "Always available",
+      "personal": "Personal interface",
+      "image": "High-quality gallery",
+      "inquiry": "Keep your inquiries"
+    },
+    "newsletter": {
+      "title": "Want to know more?",
+      "placeholder": "Write your email",
+      "description": "If you want to know more about the app and how to get more for your business. I will be glad to help."
+    }
+  },
+  "register": {
+    "title": "Please, register",
+    "name": "Your name",
+    "email": "Email address",
+    "password": "Password",
+    "button": {
+      "register": "Register",
+      "user": "Are you a user?"
+    }
+  },
+  "login": {
+    "title": "Please, log in",
+    "email": "Email address",
+    "password": "Password",
+    "button": {
+      "login": "Log in",
+      "user": "Haven't you register yet?"
+    }
+  },
+  "context": {
+    "modal": {
+      "title": "Are we continuing with the same topic?",
+      "content01": "In your last visit, you left it as:",
+      "content02": "CONTEXT",
+      "content03": "BACKGROUND",
+      "content04": "Do you want to keep it?",
+      "button": {
+        "accept": "Yes, I do",
+        "cancel": "Cancel"
+      },
+      "error": {
+        "title": "Something went wrong",
+        "content": "Sorry for the inconvenience, please try again."
+      }
+    },
+    "choose": "Choose your background image:",
+    "title": "Customize your workspace",
+    "description": "Explain in as much detail as possible how I can assist you",
+    "topic": "Define the context of the central topic to be addressed:",
+    "background": "Tell me what background image you would like to see:",
+    "button": "Let's go!"
+  },
+  "chat": {
+    "inquiries": "Your inquiries",
+    "input": "Write your inquiry and press Send",
+    "requiredInput": "Please, do not forget to send an inquiry",
+    "avatar": {
+      "title": "Your avatar",
+      "female": "Female",
+      "male": "Male"
+    },
+    "welcome": "Hello! How can I help today?",
+    "copied": "Text copied!",
+    "button": {
+      "context": "New Context",
+      "gallery": "Gallery",
+      "logout": "Log Out",
+      "send": "Send"
+    }
+  },
+  "gallery" : {
+    "input": "What do you want to find?",
+    "button": {
+      "search": "Search",
+      "back": "Back",
+      "more": "More images...",
+      "profile": "Visit profile",
+      "download": "Download",
+      "close": "Close"
+    },
+    "author": "Author:",
+    "empty": "Sorry, there wasn't any image available",
+    "modal": {
+      "error": {
+        "title": "Something went wrong",
+        "content": "Sorry for the inconvenience, please try again."
+      }
+    }
+  },
+  "questions": {
+    "improve": "Improve?",
+    "updated": "Updated!"
+  }
+}

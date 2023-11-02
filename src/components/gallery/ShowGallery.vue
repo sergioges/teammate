@@ -122,7 +122,7 @@ export default {
                 />
               </div>
               <div class="card-body">
-                <h5 class="card-title">Author: {{ capitalizeAuthor }}</h5>
+                <h5 class="card-title">{{ $t("gallery.author") }} {{ capitalizeAuthor }}</h5>
                 <p class="card-text">
                   {{ capitalizeDescription }}
                 </p>
@@ -130,7 +130,7 @@ export default {
                   :href="selectedImage.user.link"
                   target="_blank"
                   class="btn btn-primary"
-                  >Visit profile</a
+                  >{{ $t("gallery.button.profile") }}</a
                 >
               </div>
             </div>
@@ -142,14 +142,14 @@ export default {
               data-bs-dismiss="modal"
               @click="downloadImage"
             >
-              Download
+              {{ $t("gallery.button.download") }}
             </button>
             <button
               type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
             >
-              Close
+              {{ $t("gallery.button.close") }}
             </button>
           </div>
         </div>

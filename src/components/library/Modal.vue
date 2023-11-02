@@ -1,5 +1,6 @@
 <script>
-import { watch } from "vue";
+import { watch, computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "Modal",
@@ -34,11 +35,25 @@ export default {
       }
     );
 
+    //DATA
+    const { t } = useI18n();
+    const cancelAction = t("modal.button.cancel");
+    const acceptAction = t("modal.button.accept");
+
+    // COMPUTED
+    const cancelTranslation = computed(() => {
+      return props.cancelButton.action === 'Cancel' ? cancelAction : props.cancelButton.action;
+    });
+    const acceptTranslation = computed(() => {
+      return props.acceptButton.action === 'Accept' ? acceptAction : props.acceptButton.action;
+    });
+
+    // METHODS
     const modalResponse = (response) => {
       emit("modal-Response", response);
     };
 
-    return { modalResponse };
+    return { cancelTranslation, acceptTranslation, modalResponse };
   },
 };
 </script>
@@ -85,7 +100,7 @@ export default {
               data-bs-dismiss="modal"
               @click="modalResponse(false)"
             >
-              {{ cancelButton.action }}
+              {{ cancelTranslation }}
             </button>
             <button
               v-if="acceptButton.active"
@@ -94,7 +109,7 @@ export default {
               data-bs-dismiss="modal"
               @click="modalResponse(true)"
             >
-              {{ acceptButton.action }}
+              {{ acceptTranslation }}
             </button>
           </div>
         </div>

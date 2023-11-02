@@ -4,10 +4,15 @@ import InputMessage from "@/components/messages/InputMessage.vue";
 import ChatLoading from "@/components/loading/ChatLoading.vue";
 import QuestionsList from "@/components/questions/QuestionsList.vue";
 import { useImageStore } from "@/store/backgroundImage";
-import { ref, nextTick, onMounted } from "vue";
+import { ref, nextTick, computed, onMounted } from "vue";
 import router from "@/router/router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { defineLandingRoute } from "@/mixin/RouteControl";
+import { useI18n } from "vue-i18n";
+import conversation from "@/mocks/conversation";
+
+const MOCK_CONVERSATION = conversation;
 
 export default {
   name: "ChatView",
@@ -22,10 +27,11 @@ export default {
     const imageStore = useImageStore();
 
     // Data
+    const { t } = useI18n();
     const conversation = ref([
       {
         role: "assistant",
-        content: "Hello! How can I help today?",
+        content: t("chat.welcome"),
       },
     ]);
     const isLoading = ref(false);
@@ -34,33 +40,46 @@ export default {
     const questionCopied = ref({});
 
     nextTick(() => {
-      chatAutoScroll();
+      autoScrollHandler();
       getUserQuestions();
+    });
+
+    // COMPUTED
+    const contextIcon = computed(() => {
+      return t("chat.button.context") === 'Nuevo Contexto' ? 'context-button-trans' : '';
+    });
+    const logoutIcon = computed(() => {
+      return t("chat.button.logout") === 'Cerrar' ? 'logout-button-trans' : '';
     });
 
     // Methods
     const addUserQuestion = (question) => {
       conversation.value.push(question);
       isLoading.value = true;
-      chatAutoScroll();
+      autoScrollHandler();
     };
 
-    const addAssistantAnswer = (answer) => {
+    const addAssistantAnswer = (answer) => {     
       conversation.value.push(answer);
       isLoading.value = false;
-      chatAutoScroll();
       getUserQuestions();
     };
 
-    // TODO Hacer que se  muestre por lo menos las primeras lineas de la conversación con autoscroll
-    const chatAutoScroll = () => {
+    const errorAnswerHandler = (error) => {
+      console.log(error.detail);
+      isLoading.value = false;
+      conversation.value.push({
+        role: "assistant",
+        content: t("modal.error.message"),
+      });
+    };
+
+    const autoScrollHandler = () => {
+      const endMessage = document.getElementById("end-message");
       const container = document.querySelector(".chat-messages");
-      const endMessage = document.querySelector("#end-message");
-      //container.scrollTop = endMessage.offsetTop - container.offsetTop;
-      //container.scrollTop = container.scrollHeight;
       const scrollOptions = {
         behavior: "smooth",
-        block: "end",
+        block: "start",
         inline: "nearest",
       };
       endMessage.scrollIntoView(scrollOptions);
@@ -75,13 +94,16 @@ export default {
         .get(`${callBaseUrl()}/questions/${userId.value}`, { headers })
         .then((response) => {
           questions.value = response.data.questions.reverse();
+          autoScrollHandler();
         })
         .catch((error) => {
-          console.log(error.response.data.detail);
+          console.log(error.response.data);
+          if (error.response && error.response.data.code == 401) {
+            router.push(`${defineLandingRoute()}`);
+          }
         });
     };
 
-    // TODO Si la consulta es editada, revisar porque no se copia y se pega en el input
     const addQuestionCopied = (question) => {
       questionCopied.value = question;
     };
@@ -90,15 +112,11 @@ export default {
       sessionStorage.removeItem("chatgpt-userId");
       sessionStorage.removeItem("background-image");
       sessionStorage.removeItem("chatgpt-token");
-      router.push("/login");
+      router.push(`${defineLandingRoute()}`);
     };
 
-    const setNewContext = () => {
-      router.push("/context");
-    };
-
-    const setGallery = () => {
-      router.push("/gallery");
+    const sendView = (view) => {
+      router.push(view);
     };
 
     return {
@@ -107,14 +125,15 @@ export default {
       userId,
       questions,
       questionCopied,
+      contextIcon,
+      logoutIcon,
       addUserQuestion,
       addAssistantAnswer,
-      chatAutoScroll,
+      errorAnswerHandler,
       getUserQuestions,
       addQuestionCopied,
       setLogOut,
-      setNewContext,
-      setGallery,
+      sendView,
       currentImage: imageStore.currentImage,
     };
   },
@@ -124,19 +143,19 @@ export default {
 <template>
   <div
     class="app-wrapper"
-    :style="{ backgroundImage: 'url(' + currentImage.image.url + ')' }"
+    :style="{ backgroundImage: 'url(' + currentImage + ')' }"
   >
     <div class="header-container">
       <img src="../assets/logo_name.png" alt="" />
       <div>
-        <div class="logout-button btn btn-primary" @click="setLogOut()">
-          Log Out
+        <div class="logout-button btn btn-primary" :class="logoutIcon" @click="setLogOut()">
+          {{ $t("chat.button.logout") }}
         </div>
-        <div class="gallery-button btn btn-primary" @click="setGallery()">
-          Gallery
+        <div class="gallery-button btn btn-primary" @click="sendView('/gallery')">
+          {{ $t("chat.button.gallery") }}
         </div>
-        <div class="context-button btn btn-primary" @click="setNewContext()">
-          New Context
+        <div class="context-button btn btn-primary" :class="contextIcon" @click="sendView('/context')">
+          {{ $t("chat.button.context") }}
         </div>
       </div>
     </div>
@@ -163,6 +182,7 @@ export default {
         :paste-question-copied="questionCopied"
         @question-generated="addUserQuestion"
         @answer-generated="addAssistantAnswer"
+        @error-generated="errorAnswerHandler"
       ></input-message>
     </div>
   </div>

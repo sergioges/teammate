@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { useI18n } from "vue-i18n";
 
 export default {
   name: "InputMessage",
@@ -14,13 +15,12 @@ export default {
   },
   emits: {
     "question-generated": (payload) => {
-      if (payload && typeof payload === "object") {
-        return payload.role === "user" && payload.content;
-      } else {
-        return false;
-      }
+      return payload && typeof payload === "object";
     },
     "answer-generated": (payload) => {
+      return payload && typeof payload === "object";
+    },
+    "error-generated": (payload) => {
       return payload && typeof payload === "object";
     },
   },
@@ -29,23 +29,32 @@ export default {
     const question = ref({
       role: "user",
       content: "",
+      update: null
     });
+    const copiedQuestion = ref({});
+
+    const { t } = useI18n();
+
     const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
-    const placeholderInfo = ref("Write your inquiry and press Enter...");
+    const placeholderInfo = ref(t("chat.input"));
 
     // Methods
     const sendQuestion = (id) => {
-      if (!question.value.content) {
-        placeholderInfo.value = "Please, do not forget to send a query.";
+      const regexJumpLine = /^[\n]+$/;
+      let onlyJumpLine = regexJumpLine.test(question.value.content);
+      if (!question.value.content || onlyJumpLine) {
+        question.value.content = "";
+        placeholderInfo.value = t("chat.requiredInput");
       } else {
         emit("question-generated", {
           role: "user",
           content: question.value.content,
+          update: question.value.update
         });
         const headers = {
           Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
         };
-        placeholderInfo.value = "Write your inquiry and press Enter...";
+        placeholderInfo.value = t("chat.input");
         // Clean input avoiding clean question data
         setTimeout(() => {
           question.value.content = "";
@@ -59,15 +68,28 @@ export default {
             emit("answer-generated", response.data);
           })
           .catch((error) => {
-            console.log(error.response.data.detail);
+            emit("error-generated", error.response.data);
           });
       }
     };
 
+    // Update the question if it is copied and keep the copied values (content and update) 
     watch(
       () => props.pasteQuestionCopied,
       (newValue) => {
         question.value.content = newValue.content;
+        copiedQuestion.value.content = newValue.content;
+        copiedQuestion.value.update = newValue.update;
+        if (newValue.update != null) question.value.update = newValue.update;
+      }
+    );
+
+    // Control and keep the update value if the copy/paste question it is modified
+    watch(
+      () => question.value.content,
+      (newValue, oldValue) => {
+        if (oldValue != "" && newValue != oldValue) question.value.update = null;
+        if (newValue == copiedQuestion.value.content) question.value.update = copiedQuestion.value.update;
       }
     );
 
@@ -77,13 +99,24 @@ export default {
 </script>
 
 <template>
-  <input
-    type="text"
-    class="text_input"
-    :placeholder="placeholderInfo"
-    v-model="question.content"
-    @keyup.enter="sendQuestion(userId)"
-  />
+  <div>
+    <form @submit.prevent="sendQuestion(userId)" class="text_input input-group">
+      <textarea
+        rows="1"
+        type="text"
+        class="text_textarea form-control"
+        :placeholder="placeholderInfo"
+        v-model="question.content"
+      />
+      <button
+        class="send-button btn btn-secondary"
+        type="submit"
+        id="button-send"
+      >
+        {{ $t("chat.button.send") }}
+      </button>
+    </form>
+  </div>
 </template>
 
 <style scoped>

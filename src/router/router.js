@@ -1,34 +1,17 @@
 import {
     createRouter,
-    createWebHistory,
-    createMemoryHistory
+    createWebHistory
 } from 'vue-router'
-import jwt_decode from 'jwt-decode'
+import { isAuthenticated } from "@/mixin/AuthToken";
 import ContextView from '@/views/ContextView.vue'
 import ChatView from '@/views/ChatView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import GalleryView from '@/views/GalleryView.vue'
-
-function isAuthenticated() {
-    const token = sessionStorage.getItem('chatgpt-token');
-
-    if (token) {
-        try {
-            const decoded = jwt_decode(token);
-            const currentTime = Date.now() / 1000;
-
-            return decoded.exp > currentTime;
-        } catch (error) {
-            return false; // Si ocurre algún error al decodificar el token, se considera inválido
-        }
-    }
-
-    return false;
-}
+import LandingView from '@/views/LandingView.vue'
 
 const routes = [{
-        path: '/',
+        path: '/context',
         name: 'Context',
         component: ContextView,
         meta: {
@@ -62,20 +45,24 @@ const routes = [{
         component: RegisterView
     },
     {
+        path: '/',
+        name: 'Landing',
+        component: LandingView
+    },
+    {
         path: '/:pathMatch(.*)',
         redirect: '/'
     },
 ]
 
 const router = createRouter({
-    history: (createWebHistory(
-        import.meta.env.VITE_BASE_URL), createMemoryHistory()),
+    history: createWebHistory(),
     routes
 })
 
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isAuthenticated()) {
-        next('/login'); 
+        next('/'); 
     } else {
         next();
     }
