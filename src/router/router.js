@@ -1,6 +1,7 @@
 import {
     createRouter,
-    createWebHistory
+    createWebHistory,
+    createMemoryHistory
 } from 'vue-router'
 import { isAuthenticated } from "@/mixin/AuthToken";
 import ContextView from '@/views/ContextView.vue'
@@ -9,6 +10,9 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import GalleryView from '@/views/GalleryView.vue'
 import LandingView from '@/views/LandingView.vue'
+
+const conversationPath = import.meta.env.VITE_IS_LOCAL === "True" ? '/conversation' : '/';
+const landingPath = import.meta.env.VITE_IS_LOCAL === "True" ? '/' : '/welcome';
 
 const routes = [{
         path: '/context',
@@ -19,7 +23,7 @@ const routes = [{
         }
     },
     {
-        path: '/conversation',
+        path: conversationPath,
         name: 'Conversation',
         component: ChatView,
         meta: {
@@ -45,27 +49,46 @@ const routes = [{
         component: RegisterView
     },
     {
-        path: '/',
+        path: landingPath,
         name: 'Landing',
         component: LandingView
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/'
+        redirect: landingPath
     },
 ]
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes
-})
+let router;
 
-router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !isAuthenticated()) {
-        next('/'); 
-    } else {
-        next();
-    }
-});
+if (import.meta.env.VITE_IS_LOCAL === "True") {
+    router = createRouter({
+        history: createWebHistory(),
+        routes
+    })
+    router.beforeEach((to, from, next) => {
+        if (to.meta.requiresAuth && !isAuthenticated()) {
+            next('/');
+        } else {
+            next();
+        }
+    });
+} else {
+    router = createRouter({
+        history: (createWebHistory(
+            import.meta.env.VITE_BASE_URL), createMemoryHistory()),
+        routes
+    })
+
+    router.beforeEach((to, from, next) => {
+        if (to.meta.requiresAuth && !isAuthenticated()) {
+            next('/welcome');
+        } else {
+            next();
+        }
+    });
+}
+
+
 
 export default router
