@@ -1,5 +1,6 @@
 <script>
 import { ref, computed } from "vue";
+import { defineIconRoute } from "@/mixin/AlertIconControl";
 
 export default {
   name: "Alert",
@@ -27,7 +28,7 @@ export default {
     });
 
     const getIcon = computed(() => {
-      return `/teammate/icons/${icons[props.alertData.definition]}`
+      return `${defineIconRoute()}${icons[props.alertData.definition]}`
     });
 
     return { alertStyles, getIcon }
