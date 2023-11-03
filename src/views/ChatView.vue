@@ -6,9 +6,8 @@ import QuestionsList from "@/components/questions/QuestionsList.vue";
 import { useImageStore } from "@/store/backgroundImage";
 import { ref, nextTick, computed, onMounted } from "vue";
 import router from "@/router/router";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
 import { defineLandingRoute } from "@/mixin/RouteControl";
+import { getUserQuestionsService } from "@/services/QuestionsServices";
 import { useI18n } from "vue-i18n";
 import conversation from "@/mocks/conversation";
 
@@ -35,7 +34,6 @@ export default {
       },
     ]);
     const isLoading = ref(false);
-    const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
     const questions = ref([]);
     const questionCopied = ref({});
 
@@ -66,7 +64,7 @@ export default {
     };
 
     const errorAnswerHandler = (error) => {
-      console.log(error.detail);
+      console.log(error);
       isLoading.value = false;
       conversation.value.push({
         role: "assistant",
@@ -85,23 +83,14 @@ export default {
       endMessage.scrollIntoView(scrollOptions);
     };
 
-    const getUserQuestions = () => {
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
-
-      axios
-        .get(`${callBaseUrl()}/questions/${userId.value}`, { headers })
-        .then((response) => {
-          questions.value = response.data.questions.reverse();
-          autoScrollHandler();
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          if (error.response && error.response.data.code == 401) {
-            router.push(`${defineLandingRoute()}`);
-          }
-        });
+    const getUserQuestions = async () => {
+      const serviceData = await getUserQuestionsService();
+      if (serviceData.controlError) {
+        console.log(serviceData);
+      } else {
+        questions.value = serviceData;
+        autoScrollHandler();
+      }
     };
 
     const addQuestionCopied = (question) => {
@@ -122,7 +111,6 @@ export default {
     return {
       conversation,
       isLoading,
-      userId,
       questions,
       questionCopied,
       contextIcon,

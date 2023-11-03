@@ -1,7 +1,6 @@
 <script>
 import { reactive, ref } from "vue";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
+import { sendDataRegistrationService } from "@/services/LandingServices"
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 import { useI18n } from "vue-i18n";
@@ -27,31 +26,29 @@ export default {
     const modalErrorMessage = t("modal.error.message");
 
     // METHODS
-    const sendData = () => {
-      axios
-        .post(`${callBaseUrl()}/register`, userData)
-        .then((response) => {
-          alertData.value = {
-            definition: "success",
-            message: `Thanks for your registration with the email ${response.data.email}`,
-          };
-          showAlert.value = true;
-          setTimeout(() => {
-            showAlert.value = false;
-          }, 2000);
-          userData.email = "";
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          alertData.value = {
-            definition: "danger",
-            message: modalErrorMessage,
-          };
-          showAlert.value = true;
-          setTimeout(() => {
-            showAlert.value = false;
-          }, 2000);
-        });
+    const sendData = async () => {
+      const serviceData = await sendDataRegistrationService(userData);
+      if (serviceData.controlError) {
+        console.log(serviceData);
+        alertData.value = {
+          definition: "danger",
+          message: modalErrorMessage,
+        };
+        showAlert.value = true;
+        setTimeout(() => {
+          showAlert.value = false;
+        }, 2000);
+      } else {
+        alertData.value = {
+          definition: "success",
+          message: `Thanks for your registration with the email ${serviceData.email}`,
+        };
+        showAlert.value = true;
+        setTimeout(() => {
+          showAlert.value = false;
+        }, 2000);
+        userData.email = "";
+      }
     };
 
     const sendView = (view) => {

@@ -1,7 +1,6 @@
 <script>
 import { ref, watch } from "vue";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
+import { sendConversationService } from "@/services/ConversationServices";
 import { useI18n } from "vue-i18n";
 
 export default {
@@ -21,7 +20,7 @@ export default {
       return payload && typeof payload === "object";
     },
     "error-generated": (payload) => {
-      return payload && typeof payload === "object";
+      return payload && typeof payload === "string";
     },
   },
   setup(props, { emit }) {
@@ -32,14 +31,11 @@ export default {
       update: null
     });
     const copiedQuestion = ref({});
-
     const { t } = useI18n();
-
-    const userId = ref(sessionStorage.getItem("chatgpt-userId") || "");
     const placeholderInfo = ref(t("chat.input"));
 
     // Methods
-    const sendQuestion = (id) => {
+    const sendQuestion = async () => {
       const regexJumpLine = /^[\n]+$/;
       let onlyJumpLine = regexJumpLine.test(question.value.content);
       if (!question.value.content || onlyJumpLine) {
@@ -51,25 +47,20 @@ export default {
           content: question.value.content,
           update: question.value.update
         });
-        const headers = {
-          Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-        };
         placeholderInfo.value = t("chat.input");
         // Clean input avoiding clean question data
         setTimeout(() => {
           question.value.content = "";
         }, 300);
 
-        axios
-          .post(`${callBaseUrl()}/conversation/${id}`, question.value, {
-            headers,
-          })
-          .then((response) => {
-            emit("answer-generated", response.data);
-          })
-          .catch((error) => {
-            emit("error-generated", error.response.data);
-          });
+        const serviceData = await sendConversationService(question.value);
+        console.log(serviceData);
+        if (serviceData.controlError) {
+          emit("error-generated", serviceData.data);
+        } else {
+          console.log(serviceData)
+          emit("answer-generated", serviceData);
+        }
       }
     };
 
@@ -93,14 +84,14 @@ export default {
       }
     );
 
-    return { userId, question, placeholderInfo, sendQuestion };
+    return { question, placeholderInfo, sendQuestion };
   },
 };
 </script>
 
 <template>
   <div>
-    <form @submit.prevent="sendQuestion(userId)" class="text_input input-group">
+    <form @submit.prevent="sendQuestion()" class="text_input input-group">
       <textarea
         rows="1"
         type="text"
