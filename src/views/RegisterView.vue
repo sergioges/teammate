@@ -1,7 +1,6 @@
 <script>
 import { reactive, ref } from "vue";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
+import { sendNewUserService } from "@/services/RegisterServices";
 import router from "@/router/router";
 import Alert from "@/components/library/Alert.vue";
 import ImageLoading from "@/components/loading/ImageLoading.vue";
@@ -31,16 +30,12 @@ export default {
     const modalErrorMessage = t("modal.error.message");
 
     // Methods
-    const sendData = () => {
+    const sendData = async () => {
       isLoading.value = true;
-      axios
-        .post(`${callBaseUrl()}/users/`, userData)
-        .then((response) => {
-          isLoading.value = false;
-          router.push({path: "login", query:{newUser: true}})
-        })
-        .catch((error) => {
-          isLoading.value = false;
+      const serviceData = await sendNewUserService(userData);
+      if (serviceData.controlError) {
+        console.log(serviceData);
+        isLoading.value = false;
           alertData.value = {
             definition: 'danger',
             message: modalErrorMessage,
@@ -49,7 +44,10 @@ export default {
           setTimeout(() => {
             showAlert.value = false;
           }, 2000)
-        });
+      } else {
+        isLoading.value = false;
+        router.push({path: "login", query:{newUser: true}});
+      }
     };
 
     const sendView = (view) => {
