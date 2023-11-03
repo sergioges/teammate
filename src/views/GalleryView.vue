@@ -1,8 +1,7 @@
 <script>
 import { ref } from "vue";
 import router from "@/router/router";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
+import { getFirstImagesService, getNextImagesService } from "@/services/GalleryServices";
 import { defineConversationRoute } from "@/mixin/RouteControl";
 import Modal from "@/components/library/Modal.vue";
 import ShowGallery from "@/components/gallery/ShowGallery.vue";
@@ -21,9 +20,6 @@ export default {
     const titleImage = ref("");
     const nextPage = ref({ url: "" });
     const query = ref("");
-    const headers = {
-      Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}` || "",
-    };
     const modalData = ref({});
     const noImages = ref(false);
 
@@ -33,33 +29,29 @@ export default {
     const modalErrorContent = t("gallery.modal.error.content");
 
     //METHODS
-    const getFirstImages = () => {
-      axios
-        .get(`${callBaseUrl()}/gallery/${query.value}`, { headers })
-        .then((response) => {
-          images.value = response.data.gallery;
-          nextPage.value.url = response.data.next_page_url;
-          if (images.value.length == 0) {
+    const getFirstImages = async () => {
+      const serviceData = await getFirstImagesService(query.value);
+      if (serviceData.controlError) {
+        controlModalError(serviceData);
+      } else {
+        images.value = serviceData.gallery;
+        nextPage.value.url = serviceData.next_page_url;
+        if (images.value.length == 0) {
             noImages.value = true;
           } else {
             noImages.value = false;
           }
-        })
-        .catch((error) => {
-          controlModalError(error);
-        });
+      }
     };
 
-    const getNextImages = () => {
-      axios
-        .post(`${callBaseUrl()}/gallery`, nextPage.value, { headers })
-        .then((response) => {
-          images.value.push(...response.data.gallery);
-          nextPage.value.url = response.data.next_page_url;
-        })
-        .catch((error) => {
-          controlModalError(error);
-        });
+    const getNextImages = async () => {
+      const serviceData = await getNextImagesService(nextPage.value);
+      if (serviceData.controlError) {
+        controlModalError(serviceData);
+      } else {
+        images.value.push(...serviceData.gallery);
+        nextPage.value.url = serviceData.next_page_url;
+      }
     };
 
     const getImage = (image) => {
@@ -72,7 +64,7 @@ export default {
     };
 
     const controlModalError = (error) => {
-      console.log(error.response.data);
+      console.log(error);
       modalData.value = {
         title: modalErrorTitle,
         content: modalErrorContent,

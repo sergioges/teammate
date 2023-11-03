@@ -1,7 +1,7 @@
 <script>
 import { ref } from "vue";
-import axios from "axios";
-import { callBaseUrl } from "@/mixin/BaseUrl";
+import { updateUserQuestionService, deleteUserQuestionService, improveUserQuestionService } from "@/services/QuestionsServices";
+import languageSystemHandler from "@/mixin/languageSystem"
 import { useI18n } from "vue-i18n";
 
 export default {
@@ -37,44 +37,42 @@ export default {
       editIndex.value = null;
     };
 
-    const updateQuestion = (question) => {
+    const updateQuestion = async (question) => {
       question.content = questionCapitalized.value;
-
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
-
-      axios
-        .put(`${callBaseUrl()}/questions/${userId.value}`, question, {
-          headers,
-        })
-        .then((response) => {
-          editIndex.value = null;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
+      const serviceData = await updateUserQuestionService(question);
+      if (serviceData.controlError) {
+        console.log(serviceData);
+      } else {
+        editIndex.value = null;
+      }
     };
 
-    const deleteQuestion = (question) => {
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
+    const deleteQuestion = async (question) => {
+      const serviceData = await deleteUserQuestionService(question);
+      if (serviceData.controlError) {
+        console.log(serviceData);
+      } else {
+        emit("update:questions", serviceData);
+        editIndex.value = null;
+      }
+    };
 
-      axios
-        .delete(
-          `${callBaseUrl()}/questions/${userId.value}/${question.question_id}`,
-          {
-            headers,
-          }
-        )
-        .then((response) => {
-          emit("update:questions", response.data);
-          editIndex.value = null;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
+    const improveQuestion = async (question) => {
+      question.loadingHandler = true;
+      question.errorHandler = false;
+
+      question.language = languageSystemHandler();
+      delete question.role;
+
+      const serviceData = await improveUserQuestionService(question);
+      if (serviceData.controlError) {
+        console.log(serviceData);
+        question.errorHandler = true;
+        question.loadingHandler = false;
+      } else {
+        emit("update:questions", serviceData);
+        question.loadingHandler = false;
+      }
     };
 
     const capitalizeQuestion = (question) => {
@@ -96,45 +94,6 @@ export default {
       } else {
         return questionCapitalized.slice(0, 70) + " " + "...";
       }
-    };
-
-    const improveQuestion = (question) => {
-      question.loadingHandler = true;
-      question.errorHandler = false;
-      const headers = {
-        Authorization: `Bearer ${sessionStorage.getItem("chatgpt-token")}`,
-      };
-
-      const languageDict = {
-        es: "spanish",
-        en: "english",
-        fr: "french"
-      }
-      const languageSystem = window.navigator.language.substring(0, 2);
-
-      let languageContext;
-      if (!languageDict[languageSystem]) {
-        languageContext = languageDict.en
-      } else {
-        languageContext = languageDict[languageSystem]
-      }
-
-      question.language = languageContext;
-      delete question.role;
-
-      axios
-        .put(`${callBaseUrl()}/questions/improve/${userId.value}`, question, {
-          headers,
-        })
-        .then((response) => {
-          emit("update:questions", response.data);
-          question.loadingHandler = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          question.errorHandler = true;
-          question.loadingHandler = false;
-        });
     };
 
     return {

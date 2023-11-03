@@ -3,6 +3,7 @@ import { reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import axios from "axios";
 import { callBaseUrl } from "@/mixin/BaseUrl";
+import { getContextAndBackgroundService } from "@/services/ContextServices";
 import { defineConversationRoute } from "@/mixin/RouteControl";
 import { isAuthenticated } from "@/mixin/AuthToken";
 import { useImageStore } from "@/store/backgroundImage";
@@ -15,7 +16,7 @@ export default {
   name: "LoginView",
   components: {
     Alert,
-    ImageLoading
+    ImageLoading,
   },
   setup() {
     // Data
@@ -47,7 +48,7 @@ export default {
         setTimeout(() => {
           showAlert.value = false;
         }, 2000);
-      };
+      }
       // TODO check qhy this if does not check the isAuthenticated function
       // if (sessionStorage.getItem("chatgpt-token") && isAuthenticated()) {
       //   router.push({path: "context"});
@@ -67,14 +68,11 @@ export default {
         if (token) {
           sessionStorage.setItem("chatgpt-token", token);
           sessionStorage.setItem("chatgpt-userId", userId);
-          const contextResponse = await axios.get(
-            `${callBaseUrl()}/context/saved/${userId}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          if (contextResponse.data.url) {
+          const contextResponse = await getContextAndBackgroundService();
+          if (contextResponse.url) {
             const imageStore = useImageStore();
-            imageStore.setCurrentImage(contextResponse.data.url);
-            router.push({ path: `${defineConversationRoute()}`});
+            imageStore.setCurrentImage(contextResponse.url);
+            router.push({ path: `${defineConversationRoute()}` });
           } else {
             router.push({ path: "context" });
           }
@@ -82,7 +80,8 @@ export default {
           router.push("/login");
         }
       } catch (error) {
-        const errorStatus = error.response ? error.response.status : "desconocido";
+        console.log(error)
+        const errorStatus = error.status ? error.status : "desconocido";
         isLoading.value = false;
         alertData.value = {
           definition: "danger",
@@ -92,14 +91,23 @@ export default {
         setTimeout(() => {
           showAlert.value = false;
         }, 2000);
-      };
+      }
     };
 
     const sendView = (view) => {
       router.push(view);
     };
 
-    return { userData, alertData, showAlert, placeholderEmail, placeholderPassword, isLoading, sendData, sendView };
+    return {
+      userData,
+      alertData,
+      showAlert,
+      placeholderEmail,
+      placeholderPassword,
+      isLoading,
+      sendData,
+      sendView,
+    };
   },
 };
 </script>
@@ -107,7 +115,13 @@ export default {
 <template>
   <div class="login py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-      <img src="../assets/logo_complete.png" alt="" width="200" height="200" @click="sendView('/')" />
+      <img
+        src="../assets/logo_complete.png"
+        alt=""
+        width="200"
+        height="200"
+        @click="sendView('/')"
+      />
       <alert v-if="showAlert" :alert-data="alertData"></alert>
       <form @submit.prevent="sendData">
         <h1 class="h3 mb-3 fw-normal">{{ $t("login.title") }}</h1>
@@ -137,7 +151,11 @@ export default {
         <button class="btn btn-primary w-100 py-2" type="submit">
           {{ $t("login.button.login") }}
         </button>
-        <button class="btn btn-outline-secondary w-100 py-2 mt-2" type="button" @click="sendView('/register')">
+        <button
+          class="btn btn-outline-secondary w-100 py-2 mt-2"
+          type="button"
+          @click="sendView('/register')"
+        >
           {{ $t("login.button.user") }}
         </button>
       </form>
