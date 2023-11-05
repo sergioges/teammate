@@ -19,6 +19,9 @@ export default {
     ImageLoading,
   },
   setup() {
+    // Store
+    const imageStore = useImageStore();
+    
     // Data
     const route = useRoute();
     const userData = reactive({
@@ -70,7 +73,6 @@ export default {
           sessionStorage.setItem("chatgpt-userId", userId);
           const contextResponse = await getContextAndBackgroundService();
           if (contextResponse.url) {
-            const imageStore = useImageStore();
             imageStore.setCurrentImage(contextResponse.url);
             router.push({ path: `${defineConversationRoute()}` });
           } else {
