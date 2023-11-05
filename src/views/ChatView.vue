@@ -4,6 +4,7 @@ import InputMessage from "@/components/messages/InputMessage.vue";
 import ChatLoading from "@/components/loading/ChatLoading.vue";
 import QuestionsList from "@/components/questions/QuestionsList.vue";
 import { useImageStore } from "@/store/backgroundImage";
+import { useConversationStore } from "@/store/conversationStore";
 import { ref, nextTick, computed, onMounted } from "vue";
 import router from "@/router/router";
 import { defineLandingRoute } from "@/mixin/RouteControl";
@@ -24,15 +25,10 @@ export default {
   setup() {
     // Store
     const imageStore = useImageStore();
+    const conversationStore = useConversationStore();
 
     // Data
     const { t } = useI18n();
-    const conversation = ref([
-      {
-        role: "assistant",
-        content: t("chat.welcome"),
-      },
-    ]);
     const isLoading = ref(false);
     const questions = ref([]);
     const questionCopied = ref({});
@@ -40,6 +36,15 @@ export default {
     nextTick(() => {
       autoScrollHandler();
       getUserQuestions();
+    });
+
+    onMounted(() => {
+      if (conversationStore.currentConversation.length === 0) {
+          conversationStore.setCurrentConversation({
+            role: "assistant",
+            content: t("chat.welcome")
+        })
+      }
     });
 
     // COMPUTED
@@ -52,13 +57,13 @@ export default {
 
     // Methods
     const addUserQuestion = (question) => {
-      conversation.value.push(question);
+      conversationStore.setCurrentConversation(question);
       isLoading.value = true;
       autoScrollHandler();
     };
 
-    const addAssistantAnswer = (answer) => {     
-      conversation.value.push(answer);
+    const addAssistantAnswer = (answer) => {    
+      conversationStore.setCurrentConversation(answer); 
       isLoading.value = false;
       getUserQuestions();
     };
@@ -66,7 +71,7 @@ export default {
     const errorAnswerHandler = (error) => {
       console.log(error);
       isLoading.value = false;
-      conversation.value.push({
+      conversationStore.setCurrentConversation({
         role: "assistant",
         content: t("modal.error.message"),
       });
@@ -109,7 +114,6 @@ export default {
     };
 
     return {
-      conversation,
       isLoading,
       questions,
       questionCopied,
@@ -123,6 +127,7 @@ export default {
       setLogOut,
       sendView,
       currentImage: imageStore.currentImage,
+      currentConversation: conversationStore.currentConversation
     };
   },
 };
@@ -159,7 +164,7 @@ export default {
     <div class="chat-container">
       <ul class="chat-messages">
         <conversation-message
-          :conversation="conversation"
+          :conversation="currentConversation"
         ></conversation-message>
       </ul>
       <chat-loading v-if="isLoading" />

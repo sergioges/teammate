@@ -54,11 +54,9 @@ export default {
         }, 300);
 
         const serviceData = await sendConversationService(question.value);
-        console.log(serviceData);
         if (serviceData.controlError) {
           emit("error-generated", serviceData.data);
         } else {
-          console.log(serviceData)
           emit("answer-generated", serviceData);
         }
       }
