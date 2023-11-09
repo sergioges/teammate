@@ -63,6 +63,13 @@ export default {
       router.push(`${defineConversationRoute()}`);
     };
 
+    const scrollToTop = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    };
+
     const controlModalError = (error) => {
       console.log(error);
       modalData.value = {
@@ -84,6 +91,7 @@ export default {
       getNextImages,
       getImage,
       backChat,
+      scrollToTop
     };
   },
 };
@@ -144,6 +152,7 @@ export default {
       </button>
     </div>
     <div class="white-space" v-else></div>
+    <button class="top-scroll-btn" v-if="images.length > 0" @click="scrollToTop">Top</button>
   </div>
 </template>
 
