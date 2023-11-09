@@ -105,5 +105,28 @@
     }
 }
 
+.top-scroll-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px;
+  background-color: #006880 !important;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: #029cc0 !important;
+  }
+  
+  &::after {
+    content: var(--top-icon);
+    position: relative;
+    top: 5px;
+    left: 3px;
+  }
+}
+
 
 
